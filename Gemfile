@@ -24,6 +24,12 @@ group :development, :test do
   gem 'selenium-webdriver'
   gem 'rspec-rails'
   gem 'factory_bot_rails'
+  # gem 'shoulda-matchers', '~> 3.1.2', require: false
+end
+
+group :test do
+  gem 'shoulda-matchers', '~> 3.1.2'#, require: false
+  gem 'rails-controller-testing'
 end
 
 group :development do
