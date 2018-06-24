@@ -1,5 +1,5 @@
 class AddQuestionIdToAnswers < ActiveRecord::Migration[5.1]
   def change
-    add_belongs_to :answers, :question
+    add_column :answers, :question_id, :integer
   end
 end

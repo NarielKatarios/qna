@@ -1,4 +1,4 @@
 class Answer < ApplicationRecord
-  validates :title, :body, presence: true
-  belongs_to :question
+  validates :body, presence: true
+  belongs_to :question, foreign_key: 'question_id'
 end
