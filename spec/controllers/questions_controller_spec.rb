@@ -1,10 +1,10 @@
 require 'rails_helper'
 
 RSpec.describe QuestionsController, type: :controller do
-  let(:question) { FactoryBot.create(:question) }
+  let(:question) { create(:question) }
 
   describe 'GET #index' do
-    let(:questions) { FactoryBot.create_list(:question, 2) }
+    let(:questions) { create_list(:question, 2) }
 
     before { get :index }
 
