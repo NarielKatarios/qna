@@ -30,6 +30,7 @@ end
 group :test do
   gem 'shoulda-matchers', '~> 3.1.2'#, require: false
   gem 'rails-controller-testing'
+  gem 'capybara', '~> 2.13'
 end
 
 group :development do
