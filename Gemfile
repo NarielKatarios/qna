@@ -18,6 +18,7 @@ gem 'turbolinks', '~> 5'
 gem 'jbuilder', '~> 2.5'
 gem 'dotenv-rails'
 gem 'slim-rails'
+gem 'devise'
 
 group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
@@ -31,6 +32,7 @@ group :test do
   gem 'shoulda-matchers', '~> 3.1.2'#, require: false
   gem 'rails-controller-testing'
   gem 'capybara', '~> 2.13'
+  gem 'launchy'
 end
 
 group :development do
