@@ -1,6 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe QuestionsController, type: :controller do
+  let!(:user) { create(:user) }
   let(:question) { create(:question) }
 
   describe 'GET #index' do
@@ -17,7 +18,7 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   describe 'GET #show' do
-    before { get :show, params: { id: question.id } }
+    before { get :show, params: { user_id: user, id: question.id } }
     it 'assigns the requested question to @question' do
       expect(assigns(:question)).to eq question
     end
@@ -40,7 +41,7 @@ RSpec.describe QuestionsController, type: :controller do
 
   describe 'GET #edit' do
     sign_in_user
-    before { get :edit, params: { id: question.id }  }
+    before { get :edit, params: { user_id: user, id: question.id }  }
     it 'assigns the requested question to @question' do
       expect(assigns(:question)).to eq question
     end
@@ -53,20 +54,24 @@ RSpec.describe QuestionsController, type: :controller do
     sign_in_user
     context 'with valid attributes' do
       it 'saves the new question in the database' do
-        expect { post :create, params: { question: { title: '123', body: '123'} } }.to change(Question, :count).by(1)
+        #expect { post :create, params: { question: { title: '123', body: '123'} } }.to change(Question, :count).by(1)
+        #expect{post :create, params: { user_id: user.id, question_id: question.id, answer: attributes_for(:answer) }}.to change(question.answers.reload, :count).by(1)
+        expect { post :create, params: { user_id: user.id, question: attributes_for(:question) } }.to change(Question, :count).by(1)
       end
       it 'redirects to show view' do
-        post :create, params: { question: { title: '123', body: '123'} }
-        expect(response).to redirect_to question_path(assigns(:question))
+        #post :create, params: { user_id: user, question: { title: '123', body: '123'} }
+        #expect(response).to redirect_to question_path(assigns(:question))
+        post :create, params: { user_id: user, question: attributes_for(:question) }
+        expect(response).to redirect_to question_path(assigns[:question])
       end
     end
 
     context 'with invalid attributes' do
       it 'does not save the new question in the database' do
-        expect { post :create, params: { question: attributes_for(:invalid_question) } }.to_not change(Question, :count)
+        expect { post :create, params: { user_id: user, question: attributes_for(:invalid_question) } }.to_not change(Question, :count)
        end
       it 're-renders new view' do
-        post :create, params: { question: attributes_for(:invalid_question) }
+        post :create, params: { user_id: user, question: attributes_for(:invalid_question) }
         expect(response).to render_template :new
       end
     end
@@ -77,24 +82,24 @@ RSpec.describe QuestionsController, type: :controller do
     context 'valid attributes' do
       before { question }
       it 'assigns the requested question to @question' do
-        patch :update, params: { id: question, question: attributes_for(:question) }
+        patch :update, params: { user_id: user, id: question, question: attributes_for(:question) }
         expect(assigns(:question)).to eq question
       end
       it 'changes question attributes' do
-        patch :update, params: { id: question.id, question: {title: 'new title', body: 'new body'} }
+        patch :update, params: { user_id: user, id: question.id, question: {title: 'new title', body: 'new body'} }
         question.reload
         expect(question.title).to eq 'new title'
         expect(question.body).to eq 'new body'
       end
 
       it 'redirects to the updated question' do
-        patch :update, params: { id: question.id, question: attributes_for(:question) }
+        patch :update, params: { user_id: user, id: question.id, question: attributes_for(:question) }
         expect(response).to redirect_to question
       end
     end
 
     context 'invalid attributes' do
-      before { patch :update, params: { id: question.id, question: {title: 'new title', body: nil } } }
+      before { patch :update, params: { user_id: user, id: question.id, question: {title: 'new title', body: nil } } }
       it 'does not change question attributes' do
         question.reload
         expect(question.title).to eq 'MyString'

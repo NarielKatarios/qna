@@ -1,0 +1,42 @@
+h1 Question
+p
+  b Current user: &nbsp
+  - if current_user
+     = current_user.email
+  - else
+    = 'no user'
+p
+  b Question author: &nbsp
+  - if @question.user
+    = @question.user.email
+  - else
+    = 'no user'
+p
+  b Title: &nbsp
+  = @question.title
+p
+  b Body: &nbsp
+  i = @question.body
+p
+  b Answers:
+  ul
+    - @question.answers.each do |answer|
+      li
+        i
+          - if answer.user
+            = answer.user.email + ': '
+          - else
+            = 'No user: '
+        = answer.body
+        /= if ........... link_to 'delete answer', answer.destroy
+p
+  = form_for [@question, Answer.new] do |form|
+    = form.label :body, 'Your answer'
+    = form.text_field :body
+    = form.submit
+
+
+
+
+
+

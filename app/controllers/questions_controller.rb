@@ -17,10 +17,12 @@ class QuestionsController < ApplicationController
   end
 
   def create
-    @question = Question.new(question_params)
+
+    @question = current_user.questions.new(question_params)
 
     if @question.save
-      redirect_to @question
+      #redirect_to @question
+      redirect_to question_path(@question)
     else
       render :new
     end

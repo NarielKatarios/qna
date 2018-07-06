@@ -2,7 +2,7 @@ require 'rails_helper'
 
 feature 'User sign in', %q{
   In order to be able to ask question
-  As an User
+  As a User
   I want to be able to sign in
 } do
 
@@ -11,8 +11,6 @@ feature 'User sign in', %q{
   scenario 'Registered user try to sign in' do
 
     sign_in(user)
-
-    #save_and_open_page
 
     expect(page).to have_content 'Signed in successfully.'
     expect(current_path).to eq root_path
