@@ -28,15 +28,13 @@ p
           - else
             = 'No user: '
         = answer.body
-        /= if ........... link_to 'delete answer', answer.destroy
+        i
+          - if current_user == answer.user
+            = link_to 'Delete', question_answer_path(answer), method: :delete, data: { confirm: 'Вы уверены?' }
+          - else
+            = 'Don`t try'
 p
   = form_for [@question, Answer.new] do |form|
     = form.label :body, 'Your answer'
     = form.text_field :body
     = form.submit
-
-
-
-
-
-

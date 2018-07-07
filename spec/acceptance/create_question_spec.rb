@@ -19,7 +19,7 @@ feature 'Create question', %q{
 
     click_on 'Create'
 
-    expect(page).to have_content '' #'Your question has been successfully created.'
+    expect(page).to have_content 'Your question has been successfully created.'
   end
 
   scenario 'Non-authenticated user tries to create question' do

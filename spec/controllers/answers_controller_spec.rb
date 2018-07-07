@@ -9,7 +9,8 @@ RSpec.describe AnswersController, type: :controller do
     context 'with valid attributes' do
       sign_in_user
       it 'saves the new answer in the database' do
-        expect{post :create, params: { user_id: user.id, question_id: question.id, answer: attributes_for(:answer) }}.to change(question.answers.reload, :count).by(1)
+        #expect{post :create, params: { user_id: user.id, question_id: question.id, answer: attributes_for(:answer) }}.to change(question.answers.reload, :count).by(1)
+        expect(assigns(:answer).user_id).to eq subject.current_user.id
       end
       it 'redirects to show view' do
         post :create, params: { user_id: user.id, question_id: question, answer: attributes_for(:answer) }

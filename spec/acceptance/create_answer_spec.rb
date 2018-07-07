@@ -33,7 +33,7 @@ feature 'Create answer', %q{
     sign_in(user)
     visit question_path(question)
 
-    click_on 'Create'
+    click_on 'Create Answer'
 
     expect(page).to have_content 'Need text'
   end

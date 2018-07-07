@@ -20,10 +20,12 @@ table border=1
         td= link_to question.title, question
         td= question.body
         td
-          /- if current_user == question.user
-            = link_to 'Delete', question.destroy
-          /- else
-            'Don`t try'
+          - if current_user == question.user
+            = link_to 'Delete', question_path(question), method: :delete, data: { confirm: 'Вы уверены?' }
+          - else
+            = 'Don`t try'
+
+
 
   /= link_to 'Show', @questions
 p= link_to 'Ask question', new_question_path
