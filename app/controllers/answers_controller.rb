@@ -13,12 +13,10 @@ class AnswersController < ApplicationController
 
   def destroy
     @question = Question.find(params[:question_id])
-    #@answers = @question.answers.where(user_id: current_user.id)
-    #@answer = Answer.find(params[:id])
-    #@answer = @question.answers.where(user_id: current_user.id, id: params[:id]).first
     @answer = @question.answers.find_by(user_id: current_user.id, id: params[:id])
 
     if @answer.destroy
+      flash[:notice] = 'Your answer has been successfully deleted.'
       redirect_to questions_path
     else
       render 'questions/show'

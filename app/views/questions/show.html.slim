@@ -1,8 +1,13 @@
 h1 Question
+i
+  - if current_user == @question.user
+    = link_to 'Delete', question_path(@question.id), method: :delete, data: {confirm: 'Are you sure?'}
+  - else
+    = "You can not delete #{@question.title}"
 p
   b Current user: &nbsp
   - if current_user
-     = current_user.email
+    = current_user.email
   - else
     = 'no user'
 p
@@ -21,18 +26,19 @@ p
   b Answers:
   ul
     - @question.answers.each do |answer|
-      li
-        i
-          - if answer.user
-            = answer.user.email + ': '
-          - else
-            = 'No user: '
-        = answer.body
-        i
-          - if current_user == answer.user
-            = link_to 'Delete', question_answer_path(answer), method: :delete, data: { confirm: 'Вы уверены?' }
-          - else
-            = 'Don`t try'
+      - if answer.id
+        li
+          i
+            - if answer.user
+              = answer.user.email + ': '
+            - else
+              = 'No user: '
+          = answer.body
+          p
+            - if current_user == answer.user
+              = link_to 'Delete', question_answer_path(answer.id, question_id: @question.id), method: :delete, data: { confirm: 'Are you sure?' }
+            - else
+              = "You can not delete #{answer.body}"
 p
   = form_for [@question, Answer.new] do |form|
     = form.label :body, 'Your answer'

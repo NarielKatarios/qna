@@ -9,8 +9,7 @@ RSpec.describe AnswersController, type: :controller do
     context 'with valid attributes' do
       sign_in_user
       it 'saves the new answer in the database' do
-        #expect{post :create, params: { user_id: user.id, question_id: question.id, answer: attributes_for(:answer) }}.to change(question.answers.reload, :count).by(1)
-        expect(assigns(:answer).user_id).to eq subject.current_user.id
+        expect{post :create, params: { user_id: user.id, question_id: question.id, answer: attributes_for(:answer) }}.to change(question.answers.reload, :count).by(1)
       end
       it 'redirects to show view' do
         post :create, params: { user_id: user.id, question_id: question, answer: attributes_for(:answer) }
@@ -42,7 +41,8 @@ RSpec.describe AnswersController, type: :controller do
 
     it 'redirects to index view' do
       delete :destroy, params: { question_id: question.id, id: answer.id }
-      expect(response).to redirect_to question_path(assigns[:question])
+      #expect(response).to redirect_to question_path(assigns[:question])
+      expect(response).to redirect_to questions_path
     end
   end
 end

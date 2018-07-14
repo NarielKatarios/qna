@@ -54,13 +54,9 @@ RSpec.describe QuestionsController, type: :controller do
     sign_in_user
     context 'with valid attributes' do
       it 'saves the new question in the database' do
-        #expect { post :create, params: { question: { title: '123', body: '123'} } }.to change(Question, :count).by(1)
-        #expect{post :create, params: { user_id: user.id, question_id: question.id, answer: attributes_for(:answer) }}.to change(question.answers.reload, :count).by(1)
         expect { post :create, params: { user_id: user.id, question: attributes_for(:question) } }.to change(Question, :count).by(1)
       end
       it 'redirects to show view' do
-        #post :create, params: { user_id: user, question: { title: '123', body: '123'} }
-        #expect(response).to redirect_to question_path(assigns(:question))
         post :create, params: { user_id: user, question: attributes_for(:question) }
         expect(response).to redirect_to question_path(assigns[:question])
       end

@@ -7,33 +7,33 @@ feature 'Delete question', %q{
 } do
 
   given(:user) { create(:user) }
+  given(:user2) { create(:user) }
+  given(:question) { create(:question, user_id: user.id) }
 
   scenario 'Authenticated user deletes own question' do
 
     sign_in(user)
 
-    visit questions_path
+    visit question_path(question)
     click_on 'Delete'
 
-    expect(page).to have_content 'Your question has been successfully deleted.'
+    expect(page).to have_content 'Your question has been deleted.'
   end
 
   scenario 'Authenticated user deletes foreign question' do
 
-    sign_in(user)
+    sign_in(user2)
 
-    visit questions_path
-    click_on 'Delete'
+    visit question_path(question)
 
-    expect(page).to have_content 'You can delete only your questions'
+    expect(page).to have_content "You can not delete #{question.title}"
   end
 
   scenario 'Non-authenticated user tries to delete question' do
     User.create!(email: 'user@test.com', password: '12345678')
 
-    visit questions_path
-    click_on 'Delete'
+    visit question_path(question)
 
-    expect(page).to have_content 'You need to sign in or sign up before continuing.'
+    expect(page).to have_content "You can not delete #{question.title}"
   end
 end

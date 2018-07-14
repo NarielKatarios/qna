@@ -29,7 +29,6 @@ feature 'Create answer', %q{
   end
 
   scenario 'User tries to create an invalid answer' do
-
     sign_in(user)
     visit question_path(question)
 
