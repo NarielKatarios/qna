@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 feature 'Create answer', %q{
-  In order to give an answer to the question
+  In order to exchange my knowledge
   As an authenticated user
   I want to be able to answer the question
 } do
@@ -16,7 +16,10 @@ feature 'Create answer', %q{
     fill_in 'Your answer', with: 'text text'
     click_on 'Create Answer'
 
-    expect(page).to have_content 'text text'
+    expect(current_path).to eq question_path(question)
+    within '.answers' do
+      expect(page).to have_content 'text text'
+    end
   end
 
   scenario 'Non-authenticated user tries to create answer' do
