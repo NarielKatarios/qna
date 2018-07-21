@@ -11,6 +11,15 @@ class AnswersController < ApplicationController
     end
   end
 
+  def update
+    #@answer = Answer.find(params[:id])
+    #@answer.update(answer_params)
+    #@question = @answer.question
+    @question = Question.find(params[:question_id])
+    @answer = @question.answers.find_by(user_id: current_user.id, id: params[:id])
+    @answer.update(answer_params)
+  end
+
   def destroy
     @question = Question.find(params[:question_id])
     @answer = @question.answers.find_by(user_id: current_user.id, id: params[:id])

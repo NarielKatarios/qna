@@ -1,15 +1,22 @@
 ul
   - @question.answers.each do |answer|
-    - if answer.id
+    /- if answer.id
+    - if answer.persisted?
       li
         i
           - if answer.user
             = answer.user.email + ': '
           - else
             = 'No user: '
+
         = answer.body
         p
           - if current_user == answer.user
-            = link_to 'Delete', question_answer_path(answer.id, question_id: @question.id), method: :delete, data: { confirm: 'Are you sure?' }
+            p= link_to 'Edit', '', class: 'edit-answer-link', data: { answer_id: answer.id }, remote: true
+            = form_for [@question, answer], remote: true, html: { id: "edit-answer-#{answer.id}"}  do |form|
+              = form.label :body, "Answer"
+              = form.text_area :body
+              = form.submit 'Save'
+            p= link_to 'Delete', question_answer_path(answer.id, question_id: @question.id), method: :delete, data: { confirm: 'Are you sure?' }
           - else
             = "You can not delete #{answer.body}"

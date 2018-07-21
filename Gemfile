@@ -19,13 +19,14 @@ gem 'jbuilder', '~> 2.5'
 gem 'dotenv-rails'
 gem 'slim-rails'
 gem 'devise'
+gem 'jquery-rails'
 
 group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
   gem 'capybara'
   gem 'rspec-rails'
   gem 'factory_bot_rails', require: false
-  #gem 'capybara-webkit'
+  gem 'capybara-webkit', '~> 1.15.0'
 end
 
 group :test do
