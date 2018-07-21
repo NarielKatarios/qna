@@ -30,5 +30,6 @@ p
 p
   = form_for [@question, Answer.new], remote: true do |form|
     = form.label :body, 'Your answer'
+    .answer-errors
     = form.text_field :body
     = form.submit

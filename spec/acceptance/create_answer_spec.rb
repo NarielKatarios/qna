@@ -1,4 +1,4 @@
-require 'rails_helper'
+require_relative 'acceptance_helper'
 
 feature 'Create answer', %q{
   In order to exchange my knowledge
@@ -10,6 +10,7 @@ feature 'Create answer', %q{
   given!(:question) { create(:question) }
 
   scenario 'Authenticated user creates answer' do
+  #scenario 'Authenticated user creates answer', js: true do
 
     sign_in(user)
     visit question_path(question)
@@ -32,6 +33,7 @@ feature 'Create answer', %q{
   end
 
   scenario 'User tries to create an invalid answer' do
+  #scenario 'User tries to create an invalid answer', js: true do
     sign_in(user)
     visit question_path(question)
 
