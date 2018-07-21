@@ -1,0 +1,34 @@
+h1 Question
+i
+  - if current_user == @question.user
+    = link_to 'Delete', question_path(@question.id), method: :delete, data: {confirm: 'Are you sure?'}
+  - else
+    = "You can not delete #{@question.title}"
+p
+  b Current user: &nbsp
+  - if current_user
+    = current_user.email
+  - else
+    = 'no user'
+p
+  b Question author: &nbsp
+  - if @question.user
+    = @question.user.email
+  - else
+    = 'no user'
+p
+  b Title: &nbsp
+  = @question.title
+p
+  b Body: &nbsp
+  i = @question.body
+p
+  b Answers:
+  .answers
+    = render 'questions/answers'
+
+p
+  = form_for [@question, Answer.new], remote: true do |form|
+    = form.label :body, 'Your answer'
+    = form.text_field :body
+    = form.submit

@@ -1,0 +1,22 @@
+h1 Questions list
+
+p
+  b Current user: &nbsp
+  - if current_user
+    = current_user.email + ': '
+  - else
+    = 'Please, log in to ask or answer the questions'
+
+table border=1
+  thead
+    th id
+    th name
+    th body
+  tbody
+    - @questions.each do |question|
+      tr
+        td= question.id
+        td= link_to question.title, question
+        td= question.body
+
+p= link_to 'Ask question', new_question_path

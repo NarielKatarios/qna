@@ -21,3 +21,4 @@
 config/database.yml
 .idea
 test.rb
+test2.rb
