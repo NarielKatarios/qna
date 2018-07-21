@@ -9,10 +9,10 @@ RSpec.describe AnswersController, type: :controller do
     context 'with valid attributes' do
       sign_in_user
       it 'saves the new answer in the database' do
-        expect{post :create, params: { user_id: user.id, question_id: question.id, answer: attributes_for(:answer) }}.to change(question.answers.reload, :count).by(1)
+        expect{post :create, params: { user_id: user.id, question_id: question.id, answer: attributes_for(:answer), format: :js }}.to change(question.answers.reload, :count).by(1)
       end
       it 'redirects to question show view' do
-        post :create, params: { user_id: user.id, question_id: question, answer: attributes_for(:answer) }
+        post :create, params: { user_id: user.id, question_id: question, answer: attributes_for(:answer), format: :js }
         expect(response).to redirect_to question_path(assigns[:question])
       end
     end
@@ -20,10 +20,10 @@ RSpec.describe AnswersController, type: :controller do
     context 'with invalid attributes' do
       sign_in_user
       it 'does not save the new answer in the database' do
-        expect{post :create, params: { user_id: user, question_id: question, answer: attributes_for(:invalid_answer) }}.to_not change(question.answers.reload, :count)
+        expect{post :create, params: { user_id: user, question_id: question, answer: attributes_for(:invalid_answer), format: :js }}.to_not change(question.answers.reload, :count)
       end
       it 're-renders new view' do
-        post :create, params: { user_id: user.id, question_id: question.id, answer: attributes_for(:invalid_answer) }
+        post :create, params: { user_id: user.id, question_id: question.id, answer: attributes_for(:invalid_answer), format: :js }
         expect(response).to render_template 'questions/show'
       end
     end
