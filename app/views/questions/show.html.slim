@@ -28,7 +28,7 @@ p
   b Attachments: &nbsp
   ul
     - @question.attachments.each do |a|
-      li= a.file.file.filename
+      li= link_to a.file.identifier, a.file.url
 p
   b Answers:
   .answers
