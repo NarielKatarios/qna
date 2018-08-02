@@ -3,4 +3,10 @@
   = form.text_field :title
   b= form.label :body
   = form.text_area :body
+  p Attachments:
+  p
+    = form.fields_for :attachments do |a|
+      = a.label :file
+      = a.file_field :file
+
   b= form.submit 'Save'

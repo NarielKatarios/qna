@@ -25,6 +25,11 @@ p
   b Body: &nbsp
   i = @question.body
 p
+  b Attachments: &nbsp
+  ul
+    - @question.attachments.each do |a|
+      li= a.file.file.filename
+p
   b Answers:
   .answers
     = render 'questions/answers'
