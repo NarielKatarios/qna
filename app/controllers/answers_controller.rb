@@ -18,6 +18,7 @@ class AnswersController < ApplicationController
     answers = @question.answers
     best = answers.select {|answer| answer.id == @question.best_answer}
     @answers = best + (answers - best).sort
+    @answers = @question.answers
   end
 
   def destroy

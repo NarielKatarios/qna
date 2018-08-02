@@ -20,6 +20,7 @@ gem 'dotenv-rails'
 gem 'slim-rails'
 gem 'devise'
 gem 'jquery-rails'
+gem 'carrierwave'
 
 group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
@@ -32,7 +33,6 @@ end
 group :test do
   gem 'shoulda-matchers', '~> 3.1.2'#, require: false
   gem 'rails-controller-testing'
-  gem 'capybara'
   gem 'launchy'
   gem 'selenium-webdriver'
   gem 'database_cleaner'
