@@ -124,4 +124,17 @@ RSpec.describe QuestionsController, type: :controller do
       expect(response).to redirect_to questions_path
     end
   end
+
+  describe 'post #best_answer' do
+    sign_in_user
+    before { get :show, params: { user_id: user, id: question.id } }
+    before { question.answers }
+    it 'chooses best answer' do
+      expect { post :best_answer, params: { id: question.id, answer_id: answer.id } }.to change(Question, :answer.id)
+    end
+
+    it 'renders show view' do
+      expect(response).to render_template :show
+    end
+  end
 end

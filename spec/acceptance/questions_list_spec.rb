@@ -10,7 +10,6 @@ feature 'Questions_list', %q{
   scenario 'User sees the list of questions' do
 
     visit questions_path
-    expect(page).to have_content 'Questions list'
-    #save_and_open_page
+    expect(page).to have_content 'Questions'
   end
 end

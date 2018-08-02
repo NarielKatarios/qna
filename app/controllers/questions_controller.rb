@@ -8,6 +8,9 @@ class QuestionsController < ApplicationController
 
   def show
     @answer = @question.answers.build
+    answers = @question.answers
+    best = answers.select {|answer| answer.id == @question.best_answer}
+    @answers = best + (answers - best).sort_by {|answer|}
   end
 
   def new
@@ -42,6 +45,12 @@ class QuestionsController < ApplicationController
     else
       render :edit
     end
+  end
+
+  def best_answer
+    @question = Question.find(params[:question_id])
+    @question.update(best_answer: params[:answer_id])
+    redirect_to question_path(@question)
   end
 
   private

@@ -26,13 +26,15 @@ feature 'Delete answer', %q{
 
     visit question_path(question)
 
-    expect(page).to have_content "You can not delete #{answer.body}"
+    #expect(page).to have_content "You can not delete #{answer.body}"
+    expect(page).to_not have_content 'Delete'
   end
 
   scenario 'Non-authenticated user tries to delete answer' do
 
     visit question_path(question)
 
-    expect(page).to have_content "You can not delete #{answer.body}"
+    #expect(page).to have_content "You can not delete #{answer.body}"
+    expect(page).to_not have_content 'Delete'
   end
 end

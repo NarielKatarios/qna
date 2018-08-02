@@ -1,6 +1,5 @@
 ul
-  - @question.answers.each do |answer|
-    /- if answer.id
+  - @answers.each do |answer|
     - if answer.persisted?
       li
         i
@@ -10,13 +9,22 @@ ul
             = 'No user: '
 
         = answer.body
+        - if answer.id == @question.best_answer
+          p= 'This is the best answer.'
+        - else
+          = button_to 'Make this answer the best', question_best_answer_path(@question.id, answer_id: answer.id)
         p
           - if current_user == answer.user
-            p= link_to 'Edit', '', class: 'edit-answer-link', data: { answer_id: answer.id }, remote: true
-            = form_for [@question, answer], remote: true, html: { id: "edit-answer-#{answer.id}"}  do |form|
+            = link_to 'Edit', '', class: 'edit-answer-link', data: { answer_id: answer.id }
+            = form_for [@question, answer], remote: true, html: { id: "edit-answer-#{answer.id}"} do |form|
               = form.label :body, "Answer"
               = form.text_area :body
               = form.submit 'Save'
             p= link_to 'Delete', question_answer_path(answer.id, question_id: @question.id), method: :delete, data: { confirm: 'Are you sure?' }
-          - else
-            = "You can not delete #{answer.body}"
+
+javascript:
+    $('.edit-answer-link').click(function (e) {
+        answer_id = $(this).data('answerId');
+        $('form#edit-answer-' + answer_id).show();
+        e.preventDefault();
+    });

@@ -29,7 +29,8 @@ feature 'Answer editing', %q{
       end
     end
 
-    scenario 'tries to edit his answer' do
+    scenario 'tries to edit his answer', js: true do
+      byebug
       sign_in(user)
       click_on 'Edit'
       within '.answers' do
