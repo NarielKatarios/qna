@@ -1,12 +1,22 @@
 class AnswersController < ApplicationController
   before_action :authenticate_user!, only: [:create, :destroy]
+  before_action :current_user, only: [:destroy]
+
+  #def index
+  #  @answers = @question.answers.all
+  #end
+
   def create
     @question = Question.find(params[:question_id])
     @answer = @question.answers.new(answer_params.merge(user_id: current_user.id))
+    #@answer.attachments.build
+    @answers = @question.answers.all
     if @answer.save
       redirect_to question_path(@question)
     else
-      flash[:notice] = 'Need text'
+      #flash.now[:notice] = 'Need text'
+      #flash[:notice] = 'Need text'
+      flash.now[:error] = "Need text"
       render 'questions/show'
     end
   end
@@ -25,7 +35,8 @@ class AnswersController < ApplicationController
     @question = Question.find(params[:question_id])
     @answer = @question.answers.find_by(user_id: current_user.id, id: params[:id])
 
-    if @answer.destroy
+    if @answer.present?
+      @answer.destroy
       flash[:notice] = 'Your answer has been successfully deleted.'
       redirect_to questions_path
     else
@@ -36,6 +47,6 @@ class AnswersController < ApplicationController
   private
 
   def answer_params
-    params.require(:answer ).permit(:body)
+    params.require(:answer ).permit(:body, attachments_attributes: [:id, :file, :_destroy] )
   end
 end

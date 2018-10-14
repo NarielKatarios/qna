@@ -9,18 +9,31 @@ ul
             = 'No user: '
 
         = answer.body
+        - answer.attachments.each do |a|
+          p= link_to a.file.identifier, a.file.url
+          - if current_user == answer.user
+            //= link_to_remove_association 'remove file? ', attachments_id: a.id
         - if answer.id == @question.best_answer
           p= 'This is the best answer.'
         - else
-          = button_to 'Make this answer the best', question_best_answer_path(@question.id, answer_id: answer.id)
+          - if current_user == answer.user
+            = button_to 'Make this answer the best', question_best_answer_path(@question.id, answer_id: answer.id)
         p
           - if current_user == answer.user
-            = link_to 'Edit', '', class: 'edit-answer-link', data: { answer_id: answer.id }
+            = link_to 'Edit', '', class: 'edit-answer-link', id: "edit-btn-answer-#{answer.id}", data: { answer_id: answer.id }
             = form_for [@question, answer], remote: true, html: { id: "edit-answer-#{answer.id}"} do |form|
-              = form.label :body, "Answer"
-              = form.text_area :body
+              .field
+                = form.label :body, "Answer"
+                = form.text_area :body
+              = form.fields_for :attachments do |a|
+                = render 'questions/attachment_fields', f: a
+              .links
+                = link_to_add_association 'add file', form, :attachments
               = form.submit 'Save'
+              /= render 'questions/answers'
             p= link_to 'Delete', question_answer_path(answer.id, question_id: @question.id), method: :delete, data: { confirm: 'Are you sure?' }
+    /- else
+      = render 'questions/answers'
 
 javascript:
     $('.edit-answer-link').click(function (e) {
