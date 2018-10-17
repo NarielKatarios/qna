@@ -2,21 +2,14 @@ class AnswersController < ApplicationController
   before_action :authenticate_user!, only: [:create, :destroy]
   before_action :current_user, only: [:destroy]
 
-  #def index
-  #  @answers = @question.answers.all
-  #end
-
   def create
     @question = Question.find(params[:question_id])
     @answer = @question.answers.new(answer_params.merge(user_id: current_user.id))
-    #@answer.attachments.build
     @answers = @question.answers.all
     if @answer.save
       redirect_to question_path(@question)
     else
-      #flash.now[:notice] = 'Need text'
-      #flash[:notice] = 'Need text'
-      flash.now[:error] = "Need text"
+      flash.now[:notice] = 'Need text'
       render 'questions/show'
     end
   end

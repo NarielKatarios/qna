@@ -10,7 +10,6 @@ feature 'Delete files from answer', %q{
   given(:user2) { create(:user) }
   given(:question) { create(:question, user_id: user.id) }
   given!(:answer) { create(:answer, question_id: question.id, user_id: user.id) }
-  #given!(:attachment) { create(:attachment) }
   given!(:attachment) { create(:attachment, attachable: answer) }
 
   background do
@@ -19,10 +18,8 @@ feature 'Delete files from answer', %q{
   end
 
   scenario 'Author deletes a file when changing an answer', js: true do
-    #save_and_open_page
     click_link("edit-btn-answer-#{answer.id}")
     find(".remove_fields .existing").click
-    #click_on 'remove file', id: 'answer_attachments_attributes_0__destroy'
 
     expect(page).to_not have_link 'spec_helper.rb', href: '/uploads/attachment/file/1/spec_helper.rb'
   end

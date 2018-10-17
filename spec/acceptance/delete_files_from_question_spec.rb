@@ -9,8 +9,6 @@ feature 'Delete files from question', %q{
   given(:user) { create(:user) }
   given(:user2) { create(:user) }
   given(:question) { create(:question, user_id: user.id) }
-  #given(:attachment) { create(:attachment, question_id: question.id, user_id: user.id) }
-  #given!(:attachment2) { create(:attachment, attachable: question.id, user_id: user.id) }
   given!(:attachment) { create(:attachment, attachable_id: question.id, attachable_type: 'Question') }
 
   background do
@@ -19,8 +17,6 @@ feature 'Delete files from question', %q{
   end
 
   scenario 'Author deletes a file when changing a question' do
-    #attach_file 'File', "#{Rails.root}/spec/spec_helper.rb"
-    save_and_open_page
     click_on 'remove file'
 
     expect(page).to_not have_link 'spec_helper.rb', href: '/uploads/attachment/file/1/spec_helper.rb'

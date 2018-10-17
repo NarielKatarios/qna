@@ -10,7 +10,6 @@ feature 'Create answer', %q{
   given!(:question) { create(:question) }
 
   scenario 'Authenticated user creates answer' do
-  #scenario 'Authenticated user creates answer', js: true do
 
     sign_in(user)
     visit question_path(question)
@@ -34,14 +33,4 @@ feature 'Create answer', %q{
 
   given!(:answer) { create(:answer, question_id: question.id) }
 
-  #scenario 'User tries to create an invalid answer' do
-  # scenario 'User tries to create an invalid answer', js: true do
-  #   sign_in(user)
-  #   visit question_path(question)
-  #
-  #   #save_and_open_page
-  #   click_on 'Save'
-  #
-  #   expect(page).to have_content 'Need text'
-  # end
 end
