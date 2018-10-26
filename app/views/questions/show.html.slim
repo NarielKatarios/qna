@@ -5,6 +5,8 @@ body { background-color: #c3c3c3; }
       = link_to 'Edit', edit_question_path(@question.id)
       = ' '
       = link_to 'Delete', question_path(@question.id), method: :delete, data: {confirm: 'Are you sure?'}
+    /- else
+      = "You can not delete #{@question.title}"
   p
     b Current user: &nbsp
     - if current_user
@@ -32,6 +34,7 @@ body { background-color: #c3c3c3; }
     b Answers:
     .answers
       = render 'questions/answers'
+<<<<<<< d0202689426b53784ee99f4f86e402e99eeaa5af
 
   p
     = form_for [@question, Answer.new], remote: true do |form|
@@ -44,3 +47,18 @@ body { background-color: #c3c3c3; }
       .links
         = link_to_add_association 'add file', form, :attachments
       = form.submit 'Save'
+=======
+
+  p
+    = form_for [@question, Answer.new], remote: true do |form|
+      .field
+        = form.label :body, 'Your answer'
+        .answer-errors
+        = form.text_area :body
+      = form.fields_for :attachments do |a|
+        = render 'attachment_fields', f: a
+      .links
+        = link_to_add_association 'add file', form, :attachments
+      = form.submit 'Save'
+
+>>>>>>> lesson 29-8
