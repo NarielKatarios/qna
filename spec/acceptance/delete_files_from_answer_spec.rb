@@ -19,10 +19,8 @@ feature 'Delete files from answer', %q{
 
   scenario 'Author deletes a file when changing an answer', js: true do
 
-    #save_and_open_page
     click_link("edit-btn-answer-#{answer.id}")
     find(".remove_fields .existing").click
-    #click_on 'remove file', id: 'answer_attachments_attributes_0__destroy'
 
     expect(page).to_not have_link 'spec_helper.rb', href: '/uploads/attachment/file/1/spec_helper.rb'
   end

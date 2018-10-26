@@ -2,6 +2,7 @@ class AnswersController < ApplicationController
   before_action :authenticate_user!, only: [:create, :destroy]
   before_action :current_user, only: [:destroy]
 
+<<<<<<< 959fc46700087739071d4304251eaef4acb14660
 
   #def index
   #  @answers = @question.answers.all
@@ -12,14 +13,23 @@ class AnswersController < ApplicationController
     @answer = @question.answers.new(answer_params.merge(user_id: current_user.id))
     #@answer.attachments.build
 
+=======
+  def create
+    @question = Question.find(params[:question_id])
+    @answer = @question.answers.new(answer_params.merge(user_id: current_user.id))
+>>>>>>> lesson 29-8
     @answers = @question.answers.all
     if @answer.save
       redirect_to question_path(@question)
     else
+<<<<<<< 959fc46700087739071d4304251eaef4acb14660
 
       #flash.now[:notice] = 'Need text'
       #flash[:notice] = 'Need text'
       flash.now[:error] = "Need text"
+=======
+      flash.now[:notice] = 'Need text'
+>>>>>>> lesson 29-8
       render 'questions/show'
     end
   end

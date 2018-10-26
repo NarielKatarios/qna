@@ -12,7 +12,6 @@ ul
         - answer.attachments.each do |a|
           p= link_to a.file.identifier, a.file.url
           - if current_user == answer.user
-            //= link_to_remove_association 'remove file? ', attachments_id: a.id
         - if answer.id == @question.best_answer
           p= 'This is the best answer.'
         - else
@@ -30,10 +29,7 @@ ul
               .links
                 = link_to_add_association 'add file', form, :attachments
               = form.submit 'Save'
-              /= render 'questions/answers'
             p= link_to 'Delete', question_answer_path(answer.id, question_id: @question.id), method: :delete, data: { confirm: 'Are you sure?' }
-    /- else
-      = render 'questions/answers'
 
 javascript:
     $('.edit-answer-link').click(function (e) {
