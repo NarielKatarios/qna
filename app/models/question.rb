@@ -7,4 +7,5 @@ class Question < ApplicationRecord
   belongs_to :user, foreign_key: 'user_id'
 
   accepts_nested_attributes_for :attachments, reject_if: :all_blank, allow_destroy: true
+  #accepts_nested_attributes_for :attachments
 end
