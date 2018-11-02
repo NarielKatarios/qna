@@ -1,34 +1,46 @@
-h1 Question
-i
-  - if current_user == @question.user
-    = link_to 'Delete', question_path(@question.id), method: :delete, data: {confirm: 'Are you sure?'}
-  - else
-    = "You can not delete #{@question.title}"
-p
-  b Current user: &nbsp
-  - if current_user
-    = current_user.email
-  - else
-    = 'no user'
-p
-  b Question author: &nbsp
-  - if @question.user
-    = @question.user.email
-  - else
-    = 'no user'
-p
-  b Title: &nbsp
-  = @question.title
-p
-  b Body: &nbsp
-  i = @question.body
-p
-  b Answers:
-  .answers
-    = render 'questions/answers'
+body { background-color: #c3c3c3; }
+  h1 Question
+  i
+    - if current_user == @question.user
+      = link_to 'Edit', edit_question_path(@question.id)
+      = ' '
+      = link_to 'Delete', question_path(@question.id), method: :delete, data: {confirm: 'Are you sure?'}
+  p
+    b Current user: &nbsp
+    - if current_user
+      = current_user.email
+    - else
+      = 'no user'
+  p
+    b Question author: &nbsp
+    - if @question.user
+      = @question.user.email
+    - else
+      = 'no user'
+  p
+    b Title: &nbsp
+    = @question.title
+  p
+    b Body: &nbsp
+    i = @question.body
+  p
+    b Attachments: &nbsp
+    p
+      - @question.attachments.each do |a|
+        li= link_to a.file.identifier, a.file.url
+  p
+    b Answers:
+    .answers
+      = render 'questions/answers'
 
-p
-  = form_for [@question, Answer.new], remote: true do |form|
-    = form.label :body, 'Your answer'
-    = form.text_field :body
-    = form.submit
+  p
+    = form_for [@question, Answer.new], remote: true do |form|
+      .field
+        = form.label :body, 'Your answer'
+        .answer-errors
+        = form.text_area :body
+      = form.fields_for :attachments do |a|
+        = render 'attachment_fields', f: a
+      .links
+        = link_to_add_association 'add file', form, :attachments
+      = form.submit 'Save'

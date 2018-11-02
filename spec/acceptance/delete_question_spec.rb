@@ -1,4 +1,4 @@
-require 'rails_helper'
+require_relative 'acceptance_helper'
 
 feature 'Delete question', %q{
   In order to delete the question
@@ -26,7 +26,8 @@ feature 'Delete question', %q{
 
     visit question_path(question)
 
-    expect(page).to have_content "You can not delete #{question.title}"
+    #expect(page).to have_content "You can not delete #{question.title}"
+    expect(page).to_not have_content 'Delete'
   end
 
   scenario 'Non-authenticated user tries to delete question' do
@@ -34,6 +35,7 @@ feature 'Delete question', %q{
 
     visit question_path(question)
 
-    expect(page).to have_content "You can not delete #{question.title}"
+    #expect(page).to have_content "You can not delete #{question.title}"
+    expect(page).to_not have_content 'Delete'
   end
 end

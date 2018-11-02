@@ -1,4 +1,4 @@
-require 'rails_helper'
+require_relative 'acceptance_helper'
 
 feature 'Questions_list', %q{
   In order to see the questions of community
@@ -10,7 +10,6 @@ feature 'Questions_list', %q{
   scenario 'User sees the list of questions' do
 
     visit questions_path
-    expect(page).to have_content 'Questions list'
-    #save_and_open_page
+    expect(page).to have_content 'Questions'
   end
 end

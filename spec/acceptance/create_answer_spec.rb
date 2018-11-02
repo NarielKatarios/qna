@@ -1,4 +1,4 @@
-require 'rails_helper'
+require_relative 'acceptance_helper'
 
 feature 'Create answer', %q{
   In order to exchange my knowledge
@@ -14,7 +14,7 @@ feature 'Create answer', %q{
     sign_in(user)
     visit question_path(question)
     fill_in 'Your answer', with: 'text text'
-    click_on 'Create Answer'
+    click_on 'Save'
 
     expect(current_path).to eq question_path(question)
     within '.answers' do
@@ -26,17 +26,11 @@ feature 'Create answer', %q{
 
     visit question_path(question)
     fill_in 'Your answer', with: 'text text'
-    click_on 'Create Answer'
+    click_on 'Save'
 
     expect(page).to have_content 'You need to sign in or sign up before continuing.'
   end
 
-  scenario 'User tries to create an invalid answer' do
-    sign_in(user)
-    visit question_path(question)
+  given!(:answer) { create(:answer, question_id: question.id) }
 
-    click_on 'Create Answer'
-
-    expect(page).to have_content 'Need text'
-  end
 end

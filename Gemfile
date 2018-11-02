@@ -19,19 +19,22 @@ gem 'jbuilder', '~> 2.5'
 gem 'dotenv-rails'
 gem 'slim-rails'
 gem 'devise'
+gem 'jquery-rails'
+gem 'carrierwave'
+gem 'remotipart'
+gem 'cocoon'
 
 group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
-  gem 'capybara', '~> 2.13'
-  gem 'selenium-webdriver'
+  gem 'capybara'
   gem 'rspec-rails'
   gem 'factory_bot_rails', require: false
+  gem 'capybara-webkit', '~> 1.15.0'
 end
 
 group :test do
   gem 'shoulda-matchers', '~> 3.1.2'#, require: false
   gem 'rails-controller-testing'
-  gem 'capybara', '~> 2.13'
   gem 'launchy'
   gem 'selenium-webdriver'
   gem 'database_cleaner'

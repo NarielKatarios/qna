@@ -1,0 +1,16 @@
+= form_for @question do |form|
+  .field
+    = form.label :title
+    b
+    = form.text_field :title
+  .field
+    = form.label :body
+    b
+    = form.text_area :body
+  h Attachments:
+  p
+    = form.fields_for :attachments do |a|
+      = render 'attachment_fields', f: a
+    .links
+      = link_to_add_association 'add file', form, :attachments
+  b= form.submit 'Save'
