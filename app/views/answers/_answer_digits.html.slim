@@ -1,0 +1,16 @@
+div id="answer_digits_#{answer.id}"
+  p
+    b = 'Like: '
+    - answers_likes = answer.votes.select { |v| v.like }.size
+    = answers_likes
+    b
+    b = image_tag Emoji.image_url_for_name('thumbs-down5')
+    - answers_dislikes = answer.votes.select(&:dislike).size
+    = answers_dislikes
+    b
+      - rating = answers_likes - answers_dislikes
+      - if rating >= 0
+        = image_tag Emoji.image_url_for_name('like5')
+      - else
+        = image_tag Emoji.image_url_for_name('dislike5')
+      = rating

@@ -11,7 +11,8 @@ class QuestionsController < ApplicationController
     @answer.attachments.build
     answers = @question.answers
     best = answers.select {|answer| answer.id == @question.best_answer}
-    @answers = best + (answers - best).sort_by {|answer|}
+    @answers = best + (answers - best)
+    response.headers["Cache-Control"] = "no-cache, no-store"
   end
 
   def new
@@ -52,7 +53,30 @@ class QuestionsController < ApplicationController
   def best_answer
     @question = Question.find(params[:question_id])
     @question.update(best_answer: params[:answer_id])
+    @question.reload
     redirect_to question_path(@question)
+  end
+
+  def like
+    @question = Question.find(params[:question_id])
+    vote = @question.votes.find_by(user_id: current_user.id)
+    if vote
+      vote.update(like: !vote.like, dislike: false)
+    else
+      @question.votes.create(user: current_user, like: true, dislike: false)
+    end
+    response.headers["Cache-Control"] = "no-cache, no-store"
+  end
+
+  def dislike
+    @question = Question.find(params[:question_id])
+    vote = @question.votes.find_by(user_id: current_user.id)
+    if vote
+      vote.update(like: false, dislike: !vote.dislike)
+    else
+      @question.votes.create(user: current_user, like: false, dislike: true)
+    end
+    response.headers["Cache-Control"] = "no-cache, no-store"
   end
 
   private

@@ -1,7 +1,12 @@
 require 'rails_helper'
 
+
 RSpec.configure do |config|
-  Capybara.javascript_driver = :webkit
+  Capybara.javascript_driver = :selenium
+
+  Capybara.register_driver :selenium do |app|
+    Capybara::Selenium::Driver.new(app, browser: :firefox)
+  end
 
   config.include AcceptanceHelper, type: :feature
 

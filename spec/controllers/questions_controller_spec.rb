@@ -2,7 +2,9 @@ require 'rails_helper'
 
 RSpec.describe QuestionsController, type: :controller do
   let!(:user) { create(:user) }
+  let!(:user2) { create(:user) }
   let(:question) { create(:question) }
+  let(:answer) { create(:answer, question_id: question.id) }
 
   describe 'GET #index' do
     let(:questions) { create_list(:question, 2) }
@@ -136,14 +138,33 @@ RSpec.describe QuestionsController, type: :controller do
   describe 'post #best_answer' do
     sign_in_user
     before { get :show, params: { user_id: user, id: question.id } }
-    before { question.answers }
+    #before { question.answers }
     it 'chooses best answer' do
-      #expect { post :best_answer, params: { id: question.id, answer_id: answer.id } }.to change(Question, :answer.id)
-      expect { post :best_answer, params: { id: question.id, answer_id: answer.id } }.to change(Question, :answer)
+      post :best_answer, params: { question_id: question.id, answer_id: answer.id }, format: :js
+      question.reload
+      expect(question.best_answer).to be(answer.id)
     end
 
     it 'renders show view' do
       expect(response).to render_template :show
+    end
+  end
+
+  describe 'post #like' do
+    sign_in_user
+    before { get :show, params: { id: question.id } }
+    it 'likes the question' do
+      post :like, params: { question_id: question.id }, format: :js
+      expect(question.votes.find_by( user_id: @user.id ).like ).to be(true)
+    end
+  end
+
+  describe 'post #dislike' do
+    sign_in_user
+    before { get :show, params: { id: question.id } }
+    it 'likes the question' do
+      post :dislike, params: { question_id: question.id }, format: :js
+      expect(question.votes.find_by( user_id: @user.id ).dislike ).to be(true)
     end
   end
 end

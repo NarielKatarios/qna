@@ -1,0 +1,3 @@
+$('.answer_like').on("click", function() {
+       $('#answer_digits_<%= @answer.id %>').replaceWith('<%= j render "answer_digits", answer: @answer %>')
+})
