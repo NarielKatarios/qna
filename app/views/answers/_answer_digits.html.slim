@@ -1,6 +1,6 @@
 div id="answer_digits_#{answer.id}"
   p
-    b = 'Like: '
+    b = image_tag Emoji.image_url_for_name('like4')
     - answers_likes = answer.votes.select { |v| v.like }.size
     = answers_likes
     b
