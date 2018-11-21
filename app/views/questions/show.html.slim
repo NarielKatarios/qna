@@ -29,12 +29,18 @@ body { background-color: #c3c3c3; }
       - @question.attachments.each do |a|
         li= link_to a.file.identifier, a.file.url
   p
+    - if current_user && current_user != @question.user
+      = link_to 'Like it ', question_like_path(@question.id), method: :post, remote: true, id: 'like', 'data-no-turbolink' => true
+      = link_to 'Dislike it ', question_dislike_path(@question.id), method: :post, remote: true, id: 'dislike', data: { turbolinks: 'false' }
+  div#question_digits
+    = render 'question_digits', question: @question
+  p
     b Answers:
     .answers
       = render 'questions/answers'
 
   p
-    = form_for [@question, Answer.new], remote: true do |form|
+    = form_for [@question, Answer.new], remote: true, data: { type: :json } do |form|
       .field
         = form.label :body, 'Your answer'
         .answer-errors

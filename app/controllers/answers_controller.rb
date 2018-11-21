@@ -1,16 +1,23 @@
 class AnswersController < ApplicationController
   before_action :authenticate_user!, only: [:create, :destroy]
   before_action :current_user, only: [:destroy]
+  before_action :load_answer, only: [:like, :dislike]
+
+  include Voted
 
   def create
     @question = Question.find(params[:question_id])
-    @answer = @question.answers.new(answer_params.merge(user_id: current_user.id))
+    @answer = @question.answers.build(answer_params.merge(user_id: current_user.id))
     @answers = @question.answers.all
-    if @answer.save
-      redirect_to question_path(@question)
-    else
-      flash.now[:notice] = 'Need text'
-      render 'questions/show'
+
+    respond_to do |format|
+      if @answer.save
+        format.html { render partial: 'questions/answers', layout: false }
+        format.js { render json: @answer }
+      else
+        format.html {render text: @answer.errors.full_messages.join("\n"), status: :unprocessable_entity }
+        format.js {render json: @answer.errors.full_messages, status: :unprocessable_entity }
+      end
     end
   end
 
@@ -38,6 +45,14 @@ class AnswersController < ApplicationController
   end
 
   private
+
+  def vote_model
+    @answer
+  end
+
+  def load_answer
+    @answer = Answer.find(params[:answer_id])
+  end
 
   def answer_params
     params.require(:answer ).permit(:body, attachments_attributes: [:id, :file, :_destroy] )

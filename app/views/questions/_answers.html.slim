@@ -12,10 +12,18 @@ ul
         - answer.attachments.each do |a|
           p= link_to a.file.identifier, a.file.url
           - if current_user == answer.user
+        p
+          - if current_user && current_user != answer.user
+            = link_to 'Like this answer', question_answer_like_path(:question_id, answer_id: answer.id), method: :post, remote: true, class: 'answer_like', id: "like-btn-answer-#{answer.id}"
+            = link_to 'Dislike ', question_answer_dislike_path(:question_id, answer_id: answer.id), method: :post, remote: true, class: 'answer_dislike', id: "dislike-btn-answer-#{answer.id}"
+          = render 'answers/answer_digits', answer: answer
+
         - if answer.id == @question.best_answer
-          p= 'This is the best answer.'
+          = image_tag Emoji.image_url_for_name('glowing_star')
+          = 'This is the best answer.'
+
         - else
-          - if current_user == answer.user
+          - if current_user == @question.user
             = button_to 'Make this answer the best', question_best_answer_path(@question.id, answer_id: answer.id)
         p
           - if current_user == answer.user

@@ -2,18 +2,21 @@ require 'rails_helper'
 
 RSpec.describe AnswersController, type: :controller do
   let!(:user) { create(:user) }
+  let!(:user2) { create(:user) }
   let!(:question) { create(:question, user_id: user.id) }
   let(:answer) { create(:answer, question_id: question.id, user_id: user.id) }
+  let(:answer2) { create(:answer, question_id: question.id, user_id: user2.id) }
 
-  describe 'POST #create' do
+  describe 'POST #create', remote: true do
     context 'with valid attributes' do
       sign_in_user
       it 'saves the new answer in the database' do
-        expect{post :create, params: { user_id: user.id, question_id: question.id, answer: attributes_for(:answer), format: :js }}.to change(question.answers.reload, :count).by(1)
+
+        expect{post :create, params: { user_id: user.id, question_id: question.id, answer: attributes_for(:answer) }}.to change(question.answers, :count).by(1)
       end
-      it 'redirects to question show view' do
+      it 'renders to question show view' do
         post :create, params: { user_id: user.id, question_id: question, answer: attributes_for(:answer), format: :js }
-        expect(response).to redirect_to question_path(assigns[:question])
+        expect(JSON.parse(response.body)['id']).to eq question.answers.last.id
       end
     end
 
@@ -24,7 +27,7 @@ RSpec.describe AnswersController, type: :controller do
       end
       it 're-renders new view' do
         post :create, params: { user_id: user.id, question_id: question.id, answer: attributes_for(:invalid_answer), format: :js }
-        expect(response).to render_template 'questions/show'
+        expect(response).to have_http_status(:unprocessable_entity)
       end
     end
   end
@@ -68,6 +71,23 @@ RSpec.describe AnswersController, type: :controller do
     it 'render update template' do
       patch :update, params: { user_id: user, id: answer, question_id: question, answer: attributes_for(:answer) }, format: :js
       expect(response).to render_template :update
+    end
+  end
+
+
+  describe 'post #like' do
+    sign_in_user
+    it 'likes the answer' do
+      post :like, params: { question_id: question.id, answer_id: answer2.id }, format: :js
+      expect(answer2.votes.find_by( user_id: @user.id ).like ).to be(true)
+    end
+  end
+
+  describe 'post #dislike' do
+    sign_in_user
+    it 'dislikes the answer' do
+      post :dislike, params: { question_id: question.id, answer_id: answer2.id }, format: :js
+      expect(answer2.votes.find_by( user_id: @user.id ).dislike ).to be(true)
     end
   end
 end

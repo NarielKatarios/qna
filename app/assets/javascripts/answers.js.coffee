@@ -6,6 +6,9 @@ $ ->
     $('form#edit-answer-' + answer_id).show()
 
   $('form.new_answer').bind 'ajax:success', (e, data, status, xhr) ->
-    $('.answers').html(xhr.responseText)
+    answer = $.parseJSON(xhr.responseText)
+    $('.answers').append('<p>' + answer.body + '<p>')
   .bind 'ajax:error', (e, xhr, status, error) ->
-    $('.answer-errors').html(xhr.responseText)
+    errors = $.parseJSON(xhr.responseText)
+    $.each errors, (index, value) ->
+      $('.answer-errors').append(value)

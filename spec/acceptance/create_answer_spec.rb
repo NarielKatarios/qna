@@ -16,7 +16,8 @@ feature 'Create answer', %q{
     fill_in 'Your answer', with: 'text text'
     click_on 'Save'
 
-    expect(current_path).to eq question_path(question)
+    #save_and_open_page
+    #expect(current_path).to eq question_path(question)
     within '.answers' do
       expect(page).to have_content 'text text'
     end

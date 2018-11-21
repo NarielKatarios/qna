@@ -1,6 +1,9 @@
 class QuestionsController < ApplicationController
   before_action :authenticate_user!, except: [ :index, :show ]
   before_action :load_question, only: [:show, :edit, :update, :destroy]
+  before_action :load_question_for_voted, only: [:like, :dislike]
+
+  include Voted
 
   def index
     @questions = Question.all
@@ -11,7 +14,8 @@ class QuestionsController < ApplicationController
     @answer.attachments.build
     answers = @question.answers
     best = answers.select {|answer| answer.id == @question.best_answer}
-    @answers = best + (answers - best).sort_by {|answer|}
+    @answers = best + (answers - best)
+    response.headers["Cache-Control"] = "no-cache, no-store"
   end
 
   def new
@@ -52,6 +56,7 @@ class QuestionsController < ApplicationController
   def best_answer
     @question = Question.find(params[:question_id])
     @question.update(best_answer: params[:answer_id])
+    @question.reload
     redirect_to question_path(@question)
   end
 
@@ -59,6 +64,14 @@ class QuestionsController < ApplicationController
 
   def load_question
     @question = Question.find(params[:id])
+  end
+
+  def load_question_for_voted
+    @question = Question.find(params[:question_id])
+  end
+
+  def vote_model
+    @question
   end
 
   def question_params

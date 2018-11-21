@@ -1,0 +1,15 @@
+div#question_digits
+  p
+    b = image_tag Emoji.image_url_for_name('thumbs_up_sign')
+    - questions_likes = question.votes.select(&:like).size
+    = questions_likes
+    b = image_tag Emoji.image_url_for_name('unamused')
+    - questions_dislikes = question.votes.select { |v| v.dislike }.size
+    = questions_dislikes
+    b
+      - rating = questions_likes - questions_dislikes
+      - if rating >= 0
+        = image_tag Emoji.image_url_for_name('up3')
+      - else
+        = image_tag Emoji.image_url_for_name('down')
+      = rating
