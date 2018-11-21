@@ -1,10 +1,12 @@
 class AnswersController < ApplicationController
   before_action :authenticate_user!, only: [:create, :destroy]
   before_action :current_user, only: [:destroy]
+  before_action :load_answer, only: [:like, :dislike]
+
+  include Voted
 
   def create
     @question = Question.find(params[:question_id])
-    #@answer = @question.answers.new(answer_params.merge(user_id: current_user.id))
     @answer = @question.answers.build(answer_params.merge(user_id: current_user.id))
     @answers = @question.answers.all
 
@@ -17,13 +19,6 @@ class AnswersController < ApplicationController
         format.js {render json: @answer.errors.full_messages, status: :unprocessable_entity }
       end
     end
-
-    # if @answer.save
-    #   redirect_to question_path(@question)
-    # else
-    #   flash.now[:notice] = 'Need text'
-    #   render 'questions/show'
-    # end
   end
 
   def update
@@ -49,26 +44,35 @@ class AnswersController < ApplicationController
     end
   end
 
-  def like
-    @answer = Answer.find(params[:answer_id])
-    vote = @answer.votes.find_by(user_id: current_user.id)
-    if vote
-      vote.update(like: !vote.like, dislike: false)
-    else
-      @answer.votes.create(user: current_user, like: true, dislike: false)
-    end
-  end
-
-  def dislike
-    @answer = Answer.find(params[:answer_id])
-    vote = @answer.votes.find_by(user_id: current_user.id)
-    if vote
-      vote.update(like: false, dislike: !vote.dislike)
-    else
-      @answer.votes.create(user: current_user, like: false, dislike: true)
-    end  end
+  # def like
+  #   @answer = Answer.find(params[:answer_id])
+  #   vote = @answer.votes.find_by(user_id: current_user.id)
+  #   if vote
+  #     vote.update(like: !vote.like, dislike: false)
+  #   else
+  #     @answer.votes.create(user: current_user, like: true, dislike: false)
+  #   end
+  # end
+  #
+  # def dislike
+  #   @answer = Answer.find(params[:answer_id])
+  #   vote = @answer.votes.find_by(user_id: current_user.id)
+  #   if vote
+  #     vote.update(like: false, dislike: !vote.dislike)
+  #   else
+  #     @answer.votes.create(user: current_user, like: false, dislike: true)
+  #   end
+  # end
 
   private
+
+  def vote_model
+    @answer
+  end
+
+  def load_answer
+    @answer = Answer.find(params[:answer_id])
+  end
 
   def answer_params
     params.require(:answer ).permit(:body, attachments_attributes: [:id, :file, :_destroy] )
