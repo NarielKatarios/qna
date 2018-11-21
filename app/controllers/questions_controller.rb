@@ -60,28 +60,6 @@ class QuestionsController < ApplicationController
     redirect_to question_path(@question)
   end
 
-  # def like
-  #   @question = Question.find(params[:question_id])
-  #   vote = @question.votes.find_by(user_id: current_user.id)
-  #   if vote
-  #     vote.update(like: !vote.like, dislike: false)
-  #   else
-  #     @question.votes.create(user: current_user, like: true, dislike: false)
-  #   end
-  #   response.headers["Cache-Control"] = "no-cache, no-store"
-  # end
-  #
-  # def dislike
-  #   @question = Question.find(params[:question_id])
-  #   vote = @question.votes.find_by(user_id: current_user.id)
-  #   if vote
-  #     vote.update(like: false, dislike: !vote.dislike)
-  #   else
-  #     @question.votes.create(user: current_user, like: false, dislike: true)
-  #   end
-  #   response.headers["Cache-Control"] = "no-cache, no-store"
-  # end
-
   private
 
   def load_question
