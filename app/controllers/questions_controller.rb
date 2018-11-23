@@ -4,9 +4,12 @@ class QuestionsController < ApplicationController
   before_action :load_question_for_voted, only: [:like, :dislike]
 
   include Voted
+  include Commented
 
   def index
     @questions = Question.all
+    PrivatePub.publish_to "/questions", question: @question.to_json
+    render nothing: true
   end
 
   def show
@@ -16,6 +19,7 @@ class QuestionsController < ApplicationController
     best = answers.select {|answer| answer.id == @question.best_answer}
     @answers = best + (answers - best)
     response.headers["Cache-Control"] = "no-cache, no-store"
+    @comment = @question.comments.build
   end
 
   def new

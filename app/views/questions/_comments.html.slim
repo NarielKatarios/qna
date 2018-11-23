@@ -1,0 +1,28 @@
+ul
+  - poly_model.comments.each do |comment|
+    - if comment.persisted?
+      li
+        i
+          - if comment.user
+            = comment.user.email + ': '
+          - else
+            = 'No user: '
+
+        = comment.body
+      p
+          - if current_user == comment.user
+            p= link_to 'Delete'
+
+  p
+    - if poly_model == @question
+      = form_for [poly_model, poly_model.comments.new], remote: true do |form|
+        .field
+          = form.label :body, 'Your comment'
+          = form.text_area :body
+        = form.submit 'Save'
+    - else
+      = form_for @comment, url: question_answer_comment_path(answer_id: poly_model.id, question_id: @question.id), remote: true do |form|
+        .field
+          = form.label :body, 'Your comment'
+          = form.text_area :body
+        = form.submit 'Save'

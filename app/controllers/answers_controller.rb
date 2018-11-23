@@ -4,6 +4,7 @@ class AnswersController < ApplicationController
   before_action :load_answer, only: [:like, :dislike]
 
   include Voted
+  include Commented
 
   def create
     @question = Question.find(params[:question_id])
@@ -12,11 +13,19 @@ class AnswersController < ApplicationController
 
     respond_to do |format|
       if @answer.save
-        format.html { render partial: 'questions/answers', layout: false }
-        format.js { render json: @answer }
+        format.js do
+          PrivatePub.publish_to "/questions/#{@question.id}/answers", answer: @answer.to_json
+          render nothing: true
+        end
+        #format.html { render partial: 'questions/answers', layout: false }
+        #format.js { render json: @answer }
       else
-        format.html {render text: @answer.errors.full_messages.join("\n"), status: :unprocessable_entity }
-        format.js {render json: @answer.errors.full_messages, status: :unprocessable_entity }
+        format.js do
+          PrivatePub.publish_to "/questions/#{@question.id}/answers", errors: @answer.errors.full_messages
+          render nothing: true
+        end
+        #format.html {render text: @answer.errors.full_messages.join("\n"), status: :unprocessable_entity }
+        #format.js {render json: @answer.errors.full_messages, status: :unprocessable_entity }
       end
     end
   end

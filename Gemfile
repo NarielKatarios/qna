@@ -24,6 +24,8 @@ gem 'carrierwave'
 gem 'remotipart'
 gem 'cocoon'
 gem 'emoji'
+gem 'private_pub'
+gem 'thin'
 
 group :development, :test do
   gem 'byebug'

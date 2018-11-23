@@ -25,6 +25,12 @@ ul
         - else
           - if current_user == @question.user
             = button_to 'Make this answer the best', question_best_answer_path(@question.id, answer_id: answer.id)
+
+        p
+          b Comments: &nbsp
+          .comments
+            = render 'questions/comments', poly_model: answer
+
         p
           - if current_user == answer.user
             = link_to 'Edit', '', class: 'edit-answer-link', id: "edit-btn-answer-#{answer.id}", data: { answer_id: answer.id }
