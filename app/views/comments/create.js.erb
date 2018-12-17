@@ -1,0 +1,12 @@
+<% if @comment.errors.present? %>
+  <% @comment.errors.full_messages.each do |message| %>
+    $('.comment_errors').html('<%= j message %>');
+  <% end %>
+<% else %>
+  <% pmodel = @polymorphic_model.class.to_s.underscore %>
+  <% publish_to "/#{pmodel}/#{@polymorphic_model.id}/comments" do %>
+    $('.<%= pmodel %>_comments').html('<%= j render 'comments/list', poly_model: @polymorphic_model %>');
+  <% end %>
+  $('.new_comment #comment_body').val('');
+  console.log('<%= "/#{pmodel}/#{@polymorphic_model.id}/comments" %>');
+<% end %>

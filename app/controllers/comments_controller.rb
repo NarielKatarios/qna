@@ -2,46 +2,45 @@ class CommentsController < ApplicationController
   before_action :authenticate_user!, only: [:create, :destroy]
   before_action :current_user, only: [:destroy]
   before_action :load_comment, only: [:update, :destroy]
-
-  include Commented
+  before_action :load_poly_model, only: [:create, :update, :destroy]
 
   def create
-    @question = Question.find(params[:question_id])
-    @comment = @question.comments.build(comment_params.merge(user_id: current_user.id))
-    @comment.save
-
-    #@answer = @question.answers.find(params[:answer_id])
-
+    @comment = @polymorphic_model.comments.build(comment_params.merge(user_id: current_user.id))
+    respond_to do |format|
+      if @comment.save
+        format.js
+      end
+    end
   end
 
   def update
     @comment.update(comment_params)
-    @question = @comment.question
+    @question = @comment.question #????
 
-    @comments = @question.answers
+    @comments = @polymorphic_model.answers #????
   end
 
   def destroy
-    @question = Question.find(params[:question_id])
-    @comment = @question.comments.find_by(user_id: current_user.id, id: params[:id])
-
-    if @comment.present?
-      @comment.destroy
-      flash[:notice] = 'Your comment has been successfully deleted.'
-      redirect_to questions_path
-    else
-      render 'questions/show'
+    @comment = @polymorphic_model.comments.find_by(user_id: current_user.id, id: params[:id])
+    @comment.destroy if @comment.present?
+    respond_to do |format|
+        format.js
     end
   end
 
   private
 
-  def load_comment
-    @comment = Comment.find(params[:comment_id])
-    #@comment = Comment.find(params[:id])
+  def load_poly_model
+    @polymorphic_model = if params[:answer_id]
+      Answer.find(params[:answer_id])
+    else
+      Question.find(params[:question_id])
+    end
   end
 
-
+  def load_comment
+    @comment = Comment.find(params[:id])
+  end
 
   def comment_params
     params.require(:comment).permit(:body)

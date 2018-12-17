@@ -1,0 +1,12 @@
+table border=1
+  thead
+    th Number
+    th Question title
+    th Question body
+  tbody
+    .questions_list
+      - @questions.each do |question|
+        tr
+          td= question.id
+          td= link_to question.title, question
+          td= question.body

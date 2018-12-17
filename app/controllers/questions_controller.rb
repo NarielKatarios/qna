@@ -1,15 +1,11 @@
 class QuestionsController < ApplicationController
   before_action :authenticate_user!, except: [ :index, :show ]
   before_action :load_question, only: [:show, :edit, :update, :destroy]
-  before_action :load_question_for_voted, only: [:like, :dislike]
 
   include Voted
-  include Commented
 
   def index
     @questions = Question.all
-    PrivatePub.publish_to "/questions", question: @question.to_json
-    render nothing: true
   end
 
   def show
@@ -33,8 +29,9 @@ class QuestionsController < ApplicationController
   def create
     @question = current_user.questions.new(question_params)
     if @question.save
-      flash[ :notice] = 'Your question has been successfully created.'
+      PrivatePub.publish_to "/questions/new", question: @question.to_json
       redirect_to question_path(@question)
+      flash[:notice] = 'Your question has been successfully created.'
     else
       render :new
     end
@@ -68,14 +65,6 @@ class QuestionsController < ApplicationController
 
   def load_question
     @question = Question.find(params[:id])
-  end
-
-  def load_question_for_voted
-    @question = Question.find(params[:question_id])
-  end
-
-  def vote_model
-    @question
   end
 
   def question_params

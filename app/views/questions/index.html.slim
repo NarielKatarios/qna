@@ -7,18 +7,8 @@ p
   - else
     = 'Please, log in to ask or answer the questions'
 
-table border=1
-  thead
-    th Number
-    th Question title
-    th Question body
-  tbody
-    - @questions.each do |question|
-      tr
-        td= question.id
-        td= link_to question.title, question
-        td= question.body
+= render 'questions/table'
 
 p= link_to 'Ask question', new_question_path
 
-= subscribe_to "/questions"
+= subscribe_to "/questions/new"

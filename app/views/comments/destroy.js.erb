@@ -1,0 +1,4 @@
+<% pmodel = @polymorphic_model.class.to_s.underscore %>
+<% publish_to "/#{pmodel}/#{@polymorphic_model.id}/comments" do %>
+  $('.<%= pmodel %>_comments').html('<%= j render 'comments/list', poly_model: @polymorphic_model %>');
+<% end %>

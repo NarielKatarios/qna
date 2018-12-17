@@ -14,8 +14,8 @@ ul
           - if current_user == answer.user
         p
           - if current_user && current_user != answer.user
-            = link_to 'Like this answer', question_answer_like_path(:question_id, answer_id: answer.id), method: :post, remote: true, class: 'answer_like', id: "like-btn-answer-#{answer.id}"
-            = link_to 'Dislike ', question_answer_dislike_path(:question_id, answer_id: answer.id), method: :post, remote: true, class: 'answer_dislike', id: "dislike-btn-answer-#{answer.id}"
+            = link_to 'Like this answer', question_answer_like_path(@question.id, answer_id: answer.id), method: :post, remote: true, class: 'answer_like', id: "like-btn-answer-#{answer.id}"
+            = link_to 'Dislike ', question_answer_dislike_path(@question.id, answer_id: answer.id), method: :post, remote: true, class: 'answer_dislike', id: "dislike-btn-answer-#{answer.id}"
           = render 'answers/answer_digits', answer: answer
 
         - if answer.id == @question.best_answer
@@ -28,8 +28,19 @@ ul
 
         p
           b Comments: &nbsp
-          .comments
-            = render 'questions/comments', poly_model: answer
+          div class="#{answer.class.to_s.underscore}_comments"
+            = render 'comments/list', poly_model: answer
+          //div class=".comments_#{answer.class}"
+          //.comments data={answer_id: "#{answer.id}" }
+            = render 'comments/list', poly_model: answer
+
+
+              p
+                b Comments: &nbsp
+                //.comments data={question_id: "#{@question.id}" }
+                div class="#{@question.class.to_s.underscore}_comments"
+                  = render 'comments/list', poly_model: @question
+
 
         p
           - if current_user == answer.user
@@ -45,6 +56,7 @@ ul
               = form.submit 'Save'
             p= link_to 'Delete', question_answer_path(answer.id, question_id: @question.id), method: :delete, data: { confirm: 'Are you sure?' }
 
+    = subscribe_to "/answer/#{answer.id}/comments"
 javascript:
     $('.edit-answer-link').click(function (e) {
         answer_id = $(this).data('answerId');
