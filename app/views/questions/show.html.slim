@@ -2,7 +2,7 @@ body { background-color: #c3c3c3; }
   h1 Question
   i
     - if current_user == @question.user
-      = link_to 'Edit', edit_question_path(@question.id)
+      = link_to 'Edit question', edit_question_path(@question.id)
       = ' '
       = link_to 'Delete', question_path(@question.id), method: :delete, data: {confirm: 'Are you sure?'}
   p
@@ -36,8 +36,9 @@ body { background-color: #c3c3c3; }
     = render 'question_digits', question: @question
   p
     b Comments: &nbsp
-    div class="#{@question.class.to_s.underscore}_comments"
-      = render 'comments/list', poly_model: @question
+    .comments
+      div class="#{@question.class.to_s.underscore}_comments"
+        = render 'comments/list', poly_model: @question
 
   p
     b Answers:
@@ -45,16 +46,17 @@ body { background-color: #c3c3c3; }
       = render 'questions/answers'
 
   p
-    = form_for [@question, Answer.new], remote: true do |form|
-      .field
-        = form.label :body, 'Your answer'
-        .answer-errors
-        = form.text_area :body
-      = form.fields_for :attachments do |a|
-        = render 'attachment_fields', f: a
-      .links
-        = link_to_add_association 'add file', form, :attachments
-      = form.submit 'Save'
+    - if current_user
+      = form_for [@question, Answer.new], remote: true do |form|
+        .field
+          = form.label :body, 'Your answer'
+          .answer-errors
+          = form.text_area :body
+        = form.fields_for :attachments do |a|
+          = render 'attachment_fields', f: a
+        .links
+          = link_to_add_association 'add file', form, :attachments
+        = form.submit 'Save answer'
 
   = subscribe_to "/question/#{@question.id}/answers"
   = subscribe_to "/question/#{@question.id}/comments"

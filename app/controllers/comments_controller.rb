@@ -15,9 +15,8 @@ class CommentsController < ApplicationController
 
   def update
     @comment.update(comment_params)
-    @question = @comment.question #????
-
-    @comments = @polymorphic_model.answers #????
+    @question = @comment.question
+    @comments = @polymorphic_model.answers
   end
 
   def destroy

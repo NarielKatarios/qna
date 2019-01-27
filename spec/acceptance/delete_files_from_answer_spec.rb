@@ -12,15 +12,17 @@ feature 'Delete files from answer', %q{
   given!(:answer) { create(:answer, question_id: question.id, user_id: user.id) }
   given!(:attachment) { create(:attachment, attachable: answer) }
 
-  background do
-    sign_in(user)
-    visit question_path(question)
-  end
+  # background do
+  #   sign_in(user)
+  #   visit question_path(question)
+  # end
 
   scenario 'Author deletes a file when changing an answer', js: true do
-
+    sign_in(user)
+    visit question_path(question)
     click_link("edit-btn-answer-#{answer.id}")
-    find(".remove_fields .existing").click
+    # find(".remove_fields .existing").click
+    click_on 'remove file'
 
     expect(page).to_not have_link 'spec_helper.rb', href: '/uploads/attachment/file/1/spec_helper.rb'
   end
@@ -28,7 +30,7 @@ feature 'Delete files from answer', %q{
   scenario 'Authenticated user deletes foreign answers file' do
     sign_in(user2)
     visit question_path(question)
-    expect(page).to_not have_content 'edit'
+    expect(page).to_not have_content 'Edit question'
   end
 
   scenario 'Non-authenticated user tries to delete answers file' do

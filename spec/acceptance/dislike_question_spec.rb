@@ -16,7 +16,7 @@ feature 'Dislike the question', %q{
     visit question_path(question)
     click_on 'Dislike it'
     click_on 'Dislike it'
-    click_on 'Dislike it'
+    # click_on 'Dislike it'
     expect(page).to have_content '1'
   end
 

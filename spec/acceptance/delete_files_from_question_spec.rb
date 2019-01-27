@@ -11,13 +11,14 @@ feature 'Delete files from question', %q{
   given(:question) { create(:question, user_id: user.id) }
   given!(:attachment) { create(:attachment, attachable_id: question.id, attachable_type: 'Question') }
 
-  background do
-    sign_in(user)
-    visit edit_question_path(question)
-  end
+  # background do
+  #   sign_in(user)
+  #   visit edit_question_path(question)
+  # end
 
   scenario 'Author deletes a file when changing a question' do
-
+    sign_in(user)
+    visit edit_question_path(question)
     click_on 'remove file'
 
     expect(page).to_not have_link 'spec_helper.rb', href: '/uploads/attachment/file/1/spec_helper.rb'
@@ -25,8 +26,8 @@ feature 'Delete files from question', %q{
 
   scenario 'Authenticated user deletes foreign questions file' do
     sign_in(user2)
-    visit edit_question_path(question)
-    expect(page).to_not have_content 'remove file'
+    visit question_path(question)
+    expect(page).to_not have_content 'Edit'
   end
 
   scenario 'Non-authenticated user tries to delete questions file' do

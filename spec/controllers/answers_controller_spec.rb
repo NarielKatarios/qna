@@ -8,25 +8,29 @@ RSpec.describe AnswersController, type: :controller do
   let(:answer2) { create(:answer, question_id: question.id, user_id: user2.id) }
 
   describe 'POST #create', remote: true do
-    context 'with valid attributes' do
+    context 'with valid attributes', js: true do
       sign_in_user
       it 'saves the new answer in the database' do
 
-        expect{post :create, params: { user_id: user.id, question_id: question.id, answer: attributes_for(:answer) }}.to change(question.answers, :count).by(1)
+        expect{post :create, params: { user_id: user.id, question_id: question.id, answer: attributes_for(:answer), format: :js }}.to change(question.answers, :count).by(1), format: :js
       end
       it 'renders to question show view' do
-        post :create, params: { user_id: user.id, question_id: question, answer: attributes_for(:answer), format: :js }
+        byebug
+        # post :create, question_id: question, answer: attributes_for(:answer), format: :js
+        post :create, params: { user_id: user.id, question_id: question, answer: attributes_for(:answer) }, format: :js
         expect(JSON.parse(response.body)['id']).to eq question.answers.last.id
+        # expect(response).to eq question.answers.last.id
       end
     end
 
-    context 'with invalid attributes' do
+    context 'with invalid attributes', js: true do
       sign_in_user
       it 'does not save the new answer in the database' do
-        expect{post :create, params: { user_id: user, question_id: question, answer: attributes_for(:invalid_answer), format: :js }}.to_not change(question.answers.reload, :count)
+        post :create, params: { user_id: user, question_id: question, answer: attributes_for(:invalid_answer), format: :js }, format: :js
+        expect(response).to_not change(question.answers.reload, :count)
       end
       it 're-renders new view' do
-        post :create, params: { user_id: user.id, question_id: question.id, answer: attributes_for(:invalid_answer), format: :js }
+        post :create, params: { user_id: user.id, question_id: question.id, answer: attributes_for(:invalid_answer), format: :js }, format: :js
         expect(response).to have_http_status(:unprocessable_entity)
       end
     end

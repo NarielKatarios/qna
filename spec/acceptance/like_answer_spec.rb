@@ -20,7 +20,7 @@ feature 'Like the answer', %q{
       sleep 1
       click_on 'Like', id: "like-btn-answer-#{answer2.id}"
       sleep 1
-      expect(page).to have_content 'Like: 1'
+      expect(page).to have_content '101'
     end
   end
 

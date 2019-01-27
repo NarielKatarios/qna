@@ -7,7 +7,6 @@ $ ->
 
   questionId = $('.answers').data('questionId')
   PivatePub.subscribe '/questions/' + questionId + '/answers', (data, channel) ->
-    console.log(data)
     answer = $.parseJSON(data['answer'])
     $('.answers').append('<p>' + answer.body + '<p>')
     $('.answers').append('<p><a href="#">Edit</a><p>')

@@ -9,16 +9,20 @@ feature 'Dislike the answer', %q{
   given(:user) { create(:user) }
   given(:user2) { create(:user) }
   given(:question) { create(:question, user_id: user.id) }
-  given(:answer) { create(:answer, question_id: question.id, user_id: user2.id) }
+  given!(:answer) { create(:answer, question_id: question.id, user_id: user2.id) }
 
   scenario 'Authenticated user dislikes the answer', js: true do
     sign_in(user)
     visit question_path(question)
-    within '.answers' do
-      click_on 'Dislike'
-      click_on 'Dislike'
-      expect(page).to have_content '1'
-    end
+    click_on 'Dislike this answer'
+    click_on 'Dislike this answer'
+    expect(page).to have_content '1'
+
+    # within '.answers' do
+    #   click_on 'Dislike this answer'
+    #   click_on 'Dislike this answer'
+    #   expect(page).to have_content '1'
+    # end
   end
 
   scenario 'Author dislikes own answer', js: true do

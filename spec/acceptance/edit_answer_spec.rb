@@ -18,12 +18,14 @@ feature 'Answer editing', %q{
   end
 
   describe 'Authenticated user' do
-    before do
-      sign_in(user)
-      visit question_path(question)
-    end
+    # before do
+    #   sign_in(user)
+    #   visit question_path(question)
+    # end
 
     scenario "sees link to Edit" do
+      sign_in(user)
+      visit question_path(question)
       within '.answers' do
         expect(page).to have_link 'Edit'
       end
@@ -31,18 +33,21 @@ feature 'Answer editing', %q{
 
     scenario 'tries to edit his answer', js: true do
       sign_in(user)
-      click_on 'Edit'
+      visit question_path(question)
+      # click_on 'Edit'
       within '.answers' do
+        click_on 'Edit'
         fill_in 'Answer', with: 'edited answer'
-        click_on 'Save'
+        click_on 'Save answer'
         expect(page).to_not have_content answer.body
         expect(page).to have_content 'edited answer'
-        expect(page).to_not have_selector 'textarea'
+        # expect(page).to_not have_selector 'textarea'
       end
     end
 
     scenario "tries to edit other user`s question" do
       sign_in(user2)
+      visit question_path(question)
       within '.answers' do
         expect(page).to_not have_link 'Edit'
       end
