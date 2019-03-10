@@ -1,15 +1,14 @@
 require_relative 'acceptance_helper'
 
-feature 'User sign in', %q{
+feature 'User sign in', '
   In order to be able to ask question
   As a User
   I want to be able to sign in
-} do
+' do
 
   given(:user) { create(:user) }
 
   scenario 'Registered user try to sign in' do
-
     sign_in(user)
 
     expect(page).to have_content 'Signed in successfully.'

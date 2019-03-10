@@ -4,7 +4,7 @@ module Voted
   extend ActiveSupport::Concern
 
   included do
-    before_action :load_poly_model, only: [:like, :dislike]
+    before_action :load_poly_model, only: %i[like dislike]
   end
 
   def like
@@ -14,7 +14,7 @@ module Voted
     else
       polymorphic_model.votes.create(user: current_user, like: true, dislike: false)
     end
-    response.headers["Cache-Control"] = "no-cache, no-store"
+    response.headers['Cache-Control'] = 'no-cache, no-store'
   end
 
   def dislike
@@ -24,7 +24,7 @@ module Voted
     else
       polymorphic_model.votes.create(user: current_user, like: false, dislike: true)
     end
-    response.headers["Cache-Control"] = "no-cache, no-store"
+    response.headers['Cache-Control'] = 'no-cache, no-store'
   end
 
   private
@@ -40,5 +40,4 @@ module Voted
       @question = Question.find(params[:question_id])
     end
   end
-
 end

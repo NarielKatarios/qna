@@ -1,10 +1,10 @@
 require_relative 'acceptance_helper'
 
-feature 'Comet question', %q{
+feature 'Comet question', '
   In order to see new questions
   As an user
   I want to be able to see all of questions without rendering page
-} do
+' do
 
   given(:user) { create(:user) }
   given(:user2) { create(:user) }

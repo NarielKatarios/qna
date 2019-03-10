@@ -1,8 +1,8 @@
 class CommentsController < ApplicationController
-  before_action :authenticate_user!, only: [:create, :destroy]
+  before_action :authenticate_user!, only: %i[create destroy]
   before_action :current_user, only: [:destroy]
-  before_action :load_comment, only: [:update, :destroy]
-  before_action :load_poly_model, only: [:create, :update, :destroy]
+  before_action :load_comment, only: %i[update destroy]
+  before_action :load_poly_model, only: %i[create update destroy]
 
   respond_to :js
 
@@ -25,9 +25,9 @@ class CommentsController < ApplicationController
 
   def load_poly_model
     @polymorphic_model = if params[:answer_id]
-      Answer.find(params[:answer_id])
-    else
-      Question.find(params[:question_id])
+                           Answer.find(params[:answer_id])
+                         else
+                           Question.find(params[:question_id])
     end
   end
 

@@ -1,10 +1,10 @@
 require_relative 'acceptance_helper'
 
-feature 'Delete files from question', %q{
+feature 'Delete files from question', "
   In order to change illustration to my question
   As an question's author
   I'd like to be able to delete files
-} do
+" do
 
   given(:user) { create(:user) }
   given(:user2) { create(:user) }
@@ -33,6 +33,3 @@ feature 'Delete files from question', %q{
     expect(page).to_not have_content 'remove file'
   end
 end
-
-
-

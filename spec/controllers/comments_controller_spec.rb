@@ -7,7 +7,6 @@ RSpec.describe CommentsController, type: :controller do
   let(:answer) { create :answer }
 
   describe 'POST #create', remote: true do
-
     it 'loads question if poly_model is question' do
       post :create, params: { question_id: question.id, comment: attributes_for(:comment), format: :js }
       expect(assigns(:polymorphic_model)).to eq question
@@ -17,7 +16,7 @@ RSpec.describe CommentsController, type: :controller do
       expect(assigns(:polymorphic_model)).to eq answer
     end
     it 'saves the new question\'s comment in the database' do
-      expect{post :create, params: { question_id: question.id, comment: attributes_for(:comment), format: :js }}.to change(question.comments, :count).by(1), format: :js
+      expect { post :create, params: { question_id: question.id, comment: attributes_for(:comment), format: :js } }.to change(question.comments, :count).by(1), format: :js
     end
   end
 end

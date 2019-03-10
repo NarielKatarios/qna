@@ -1,16 +1,15 @@
 require_relative 'acceptance_helper'
 
-feature 'Answer editing', %q{
+feature 'Answer editing', "
   In order to fix mistake
   As an author of answer
   I'd like to be able to edit my answer
-} do
+" do
 
   given(:user) { create(:user) }
   given(:user2) { create(:user) }
   given!(:question) { create(:question) }
   given!(:answer) { create(:answer, question_id: question.id, user_id: user.id) }
-
 
   scenario 'Unauthenticated user try to edit question' do
     visit question_path(question)
@@ -18,8 +17,7 @@ feature 'Answer editing', %q{
   end
 
   describe 'Authenticated user' do
-
-    scenario "sees link to Edit" do
+    scenario 'sees link to Edit' do
       sign_in(user)
       visit question_path(question)
       within '.answers' do
@@ -39,7 +37,7 @@ feature 'Answer editing', %q{
       end
     end
 
-    scenario "tries to edit other user`s question" do
+    scenario 'tries to edit other user`s question' do
       sign_in(user2)
       visit question_path(question)
       within '.answers' do

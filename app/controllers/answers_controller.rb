@@ -1,7 +1,7 @@
 class AnswersController < ApplicationController
-  before_action :authenticate_user!, only: [:create, :destroy]
+  before_action :authenticate_user!, only: %i[create destroy]
   before_action :current_user, only: [:destroy]
-  before_action :load_answer, only: [:update, :destroy]
+  before_action :load_answer, only: %i[update destroy]
 
   respond_to :js
   respond_to :json, only: [:create]
@@ -19,7 +19,7 @@ class AnswersController < ApplicationController
   def update
     @answer.update(answer_params)
     answers = @question.answers
-    best = answers.select {|answer| answer.id == @question.best_answer}
+    best = answers.select { |answer| answer.id == @question.best_answer }
     @answers = best + (answers - best).sort
     @answers = @question.answers
     respond_with @answer
@@ -38,6 +38,6 @@ class AnswersController < ApplicationController
   end
 
   def answer_params
-    params.require(:answer ).permit(:body, attachments_attributes: [:id, :file, :_destroy] )
+    params.require(:answer).permit(:body, attachments_attributes: %i[id file _destroy])
   end
 end

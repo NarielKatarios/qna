@@ -1,9 +1,8 @@
 class QuestionsController < ApplicationController
-  before_action :authenticate_user!, except: [ :index, :show ]
-  before_action :load_question, only: [:show, :edit, :update, :destroy]
+  before_action :authenticate_user!, except: %i[index show]
+  before_action :load_question, only: %i[show edit update destroy]
   before_action :build_answer, only: :show
   after_action :publish_question, only: :create
-
 
   respond_to :html
 
@@ -15,9 +14,9 @@ class QuestionsController < ApplicationController
 
   def show
     answers = @question.answers
-    best = answers.select {|answer| answer.id == @question.best_answer}
+    best = answers.select { |answer| answer.id == @question.best_answer }
     @answers = best + (answers - best)
-    response.headers["Cache-Control"] = "no-cache, no-store"
+    response.headers['Cache-Control'] = 'no-cache, no-store'
     @comment = @question.comments.build
     respond_with @question
   end
@@ -26,8 +25,7 @@ class QuestionsController < ApplicationController
     respond_with(@question = Question.new)
   end
 
-  def edit
-  end
+  def edit; end
 
   def create
     respond_with(@question = current_user.questions.create(question_params))
@@ -57,7 +55,7 @@ class QuestionsController < ApplicationController
   end
 
   def publish_question
-    PrivatePub.publish_to "/questions/new", question: @question.to_json if @question.valid?
+    PrivatePub.publish_to '/questions/new', question: @question.to_json if @question.valid?
   end
 
   def build_answer
@@ -65,6 +63,6 @@ class QuestionsController < ApplicationController
   end
 
   def question_params
-    params.require(:question).permit(:title, :body, attachments_attributes: [:id, :file, :_destroy] )
+    params.require(:question).permit(:title, :body, attachments_attributes: %i[id file _destroy])
   end
 end

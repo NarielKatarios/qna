@@ -1,10 +1,10 @@
 require_relative 'acceptance_helper'
 
-feature 'Dislike the question', %q{
+feature 'Dislike the question', '
   In order to vote for the question
   As an authenticated user
   I want to be able to dislike the question
-} do
+' do
 
   given(:user) { create(:user) }
   given(:user2) { create(:user) }
@@ -23,5 +23,4 @@ feature 'Dislike the question', %q{
     visit question_path(question)
     expect(page).to_not have_content 'Dislike it'
   end
-
 end

@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :comment do
-    body { "MyComment" }
+    body { 'MyComment' }
     user
     question
     answer

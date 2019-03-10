@@ -49,7 +49,7 @@ RSpec.describe QuestionsController, type: :controller do
 
   describe 'GET #edit' do
     sign_in_user
-    before { get :edit, params: { user_id: user, id: question.id }  }
+    before { get :edit, params: { user_id: user, id: question.id } }
     it 'assigns the requested question to @question' do
       expect(assigns(:question)).to eq question
     end
@@ -73,7 +73,7 @@ RSpec.describe QuestionsController, type: :controller do
     context 'with invalid attributes' do
       it 'does not save the new question in the database' do
         expect { post :create, params: { user_id: user, question: attributes_for(:invalid_question) } }.to_not change(Question, :count)
-       end
+      end
       it 're-renders new view' do
         post :create, params: { user_id: user, question: attributes_for(:invalid_question) }
         expect(response).to render_template :new
@@ -90,7 +90,7 @@ RSpec.describe QuestionsController, type: :controller do
         expect(assigns(:question)).to eq question
       end
       it 'changes question attributes' do
-        patch :update, params: { user_id: user, id: question.id, question: {title: 'new title', body: 'new body'} }
+        patch :update, params: { user_id: user, id: question.id, question: { title: 'new title', body: 'new body' } }
         question.reload
         expect(question.title).to eq 'new title'
         expect(question.body).to eq 'new body'
@@ -103,7 +103,7 @@ RSpec.describe QuestionsController, type: :controller do
     end
 
     context 'invalid attributes' do
-      before { patch :update, params: { user_id: user, id: question.id, question: {title: 'new title', body: nil } } }
+      before { patch :update, params: { user_id: user, id: question.id, question: { title: 'new title', body: nil } } }
       it 'does not change question attributes' do
         question.reload
         expect(question.title).to eq 'MyString'
@@ -131,7 +131,7 @@ RSpec.describe QuestionsController, type: :controller do
   describe 'post #best_answer' do
     sign_in_user
     before { get :show, params: { user_id: user, id: question.id } }
-    #before { question.answers }
+    # before { question.answers }
     it 'chooses best answer' do
       post :best_answer, params: { question_id: question.id, answer_id: answer.id }, format: :js
       question.reload
@@ -148,7 +148,7 @@ RSpec.describe QuestionsController, type: :controller do
     before { get :show, params: { id: question.id } }
     it 'likes the question' do
       post :like, params: { question_id: question.id }, format: :js
-      expect(question.votes.find_by( user_id: @user.id ).like ).to be(true)
+      expect(question.votes.find_by(user_id: @user.id).like).to be(true)
     end
   end
 
@@ -157,7 +157,7 @@ RSpec.describe QuestionsController, type: :controller do
     before { get :show, params: { id: question.id } }
     it 'likes the question' do
       post :dislike, params: { question_id: question.id }, format: :js
-      expect(question.votes.find_by( user_id: @user.id ).dislike ).to be(true)
+      expect(question.votes.find_by(user_id: @user.id).dislike).to be(true)
     end
   end
 end

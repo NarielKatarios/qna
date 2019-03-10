@@ -11,15 +11,14 @@ RSpec.describe AnswersController, type: :controller do
     context 'with valid attributes', js: true do
       sign_in_user
       it 'saves the new answer in the database' do
-
-        expect{post :create, params: { user_id: user.id, question_id: question.id, answer: attributes_for(:answer), format: :js }}.to change(question.answers, :count).by(1), format: :js
+        expect { post :create, params: { user_id: user.id, question_id: question.id, answer: attributes_for(:answer), format: :js } }.to change(question.answers, :count).by(1), format: :js
       end
     end
 
     context 'with invalid attributes', js: true do
       sign_in_user
       it 'does not save the new answer in the database' do
-        expect{post :create, params: { user_id: user, question_id: question, answer: attributes_for(:invalid_answer), format: :js }}.to_not change(question.answers.reload, :count)
+        expect { post :create, params: { user_id: user, question_id: question, answer: attributes_for(:invalid_answer), format: :js } }.to_not change(question.answers.reload, :count)
       end
     end
   end
@@ -36,7 +35,6 @@ RSpec.describe AnswersController, type: :controller do
   end
 
   describe 'PATH #update' do
-
     sign_in_user
     before { question }
     it 'assigns the requested answer to @answer' do
@@ -50,7 +48,7 @@ RSpec.describe AnswersController, type: :controller do
     end
 
     it 'changes answer attributes' do
-      patch :update, params: { user_id: user, id: answer, question_id: question, answer: {body: 'new body'} }, format: :js
+      patch :update, params: { user_id: user, id: answer, question_id: question, answer: { body: 'new body' } }, format: :js
       answer.reload
       expect(answer.body).to eq 'new body'
     end
@@ -61,12 +59,11 @@ RSpec.describe AnswersController, type: :controller do
     end
   end
 
-
   describe 'post #like' do
     sign_in_user
     it 'likes the answer' do
       post :like, params: { question_id: question.id, answer_id: answer2.id }, format: :js
-      expect(answer2.votes.find_by( user_id: @user.id ).like ).to be(true)
+      expect(answer2.votes.find_by(user_id: @user.id).like).to be(true)
     end
   end
 
@@ -74,7 +71,7 @@ RSpec.describe AnswersController, type: :controller do
     sign_in_user
     it 'dislikes the answer' do
       post :dislike, params: { question_id: question.id, answer_id: answer2.id }, format: :js
-      expect(answer2.votes.find_by( user_id: @user.id ).dislike ).to be(true)
+      expect(answer2.votes.find_by(user_id: @user.id).dislike).to be(true)
     end
   end
 end
