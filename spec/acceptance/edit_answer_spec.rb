@@ -1,16 +1,15 @@
 require_relative 'acceptance_helper'
 
-feature 'Answer editing', %q{
+feature 'Answer editing', "
   In order to fix mistake
   As an author of answer
   I'd like to be able to edit my answer
-} do
+" do
 
   given(:user) { create(:user) }
   given(:user2) { create(:user) }
   given!(:question) { create(:question) }
   given!(:answer) { create(:answer, question_id: question.id, user_id: user.id) }
-
 
   scenario 'Unauthenticated user try to edit question' do
     visit question_path(question)
@@ -18,12 +17,9 @@ feature 'Answer editing', %q{
   end
 
   describe 'Authenticated user' do
-    before do
+    scenario 'sees link to Edit' do
       sign_in(user)
       visit question_path(question)
-    end
-
-    scenario "sees link to Edit" do
       within '.answers' do
         expect(page).to have_link 'Edit'
       end
@@ -31,18 +27,19 @@ feature 'Answer editing', %q{
 
     scenario 'tries to edit his answer', js: true do
       sign_in(user)
-      click_on 'Edit'
+      visit question_path(question)
       within '.answers' do
+        click_on 'Edit'
         fill_in 'Answer', with: 'edited answer'
-        click_on 'Save'
+        click_on 'Save answer'
         expect(page).to_not have_content answer.body
         expect(page).to have_content 'edited answer'
-        expect(page).to_not have_selector 'textarea'
       end
     end
 
-    scenario "tries to edit other user`s question" do
+    scenario 'tries to edit other user`s question' do
       sign_in(user2)
+      visit question_path(question)
       within '.answers' do
         expect(page).to_not have_link 'Edit'
       end

@@ -1,10 +1,10 @@
 require_relative 'acceptance_helper'
 
-feature 'Best answer', %q{
+feature 'Best answer', '
   In order to choose the best answer to the question
   As an author of the question
   I want to be able to mark best answer
-} do
+' do
 
   given(:user) { create(:user) }
   given(:question) { create(:question, user_id: user.id) }

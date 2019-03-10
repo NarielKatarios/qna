@@ -1,7 +1,12 @@
 Rails.application.routes.draw do
   devise_for :users
-  resources :questions do
-    resources :answers, only: [:create, :destroy, :update] do
+
+  concern :commentable do
+    resources :comments
+  end
+
+  resources :questions, concerns: :commentable, shallow: true do
+    resources :answers, concerns: :commentable, only: %i[create destroy update], shallow: true do
       post :like
       post :dislike
     end
@@ -10,5 +15,5 @@ Rails.application.routes.draw do
     post :dislike
   end
 
-  root to: "questions#index"
+  root to: 'questions#index'
 end

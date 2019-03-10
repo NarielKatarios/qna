@@ -1,16 +1,16 @@
 require_relative 'acceptance_helper'
 
-feature 'Like the question', %q{
+feature 'Like the question', '
   In order to vote for the question
   As an authenticated user
   I want to be able to like the question
-} do
+' do
 
   given(:user) { create(:user) }
   given(:user2) { create(:user) }
-  #given(:like_vote) { create(:vote, user_id: user2.id, like: true, dislike: false ) }
-  #given(:dislike_vote) { create(:vote, user_id: user2.id, like: false, dislike: true ) }
-  given(:question) { create(:question, user_id: user.id )}
+  # given(:like_vote) { create(:vote, user_id: user2.id, like: true, dislike: false ) }
+  # given(:dislike_vote) { create(:vote, user_id: user2.id, like: false, dislike: true ) }
+  given(:question) { create(:question, user_id: user.id) }
 
   scenario 'Authenticated user likes the question', js: true do
     sign_in(user2)
@@ -40,5 +40,4 @@ feature 'Like the question', %q{
     visit question_path(question)
     expect(page).to have_content '0'
   end
-
 end

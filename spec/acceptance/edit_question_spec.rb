@@ -1,16 +1,16 @@
 require_relative 'acceptance_helper'
 
-feature 'Edit question', %q{
+feature 'Edit question', "
   In order to fix mistake
   As an author of question
   I'd like to be able to edit my question
-} do
+" do
 
   given(:user) { create(:user) }
   given(:user2) { create(:user) }
   given(:question) { create(:question, user_id: user.id) }
 
-  scenario 'Authenticated user edites own question' do
+  scenario 'Authenticated user edits own question' do
     sign_in(user)
 
     visit question_path(question)
@@ -27,7 +27,6 @@ feature 'Edit question', %q{
   end
 
   scenario 'Authenticated user tries to edit foreign question' do
-
     sign_in(user2)
 
     visit question_path(question)

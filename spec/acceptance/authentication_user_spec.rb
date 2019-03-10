@@ -1,10 +1,10 @@
 require_relative 'acceptance_helper'
 
-feature 'User authenticates', %q{
+feature 'User authenticates', '
   In order to be able to sign in
   As an authenticated User
   I want to be able to authenticate
-} do
+' do
 
   scenario 'Non-Registered user tries to authenticate' do
     visit new_user_session_path

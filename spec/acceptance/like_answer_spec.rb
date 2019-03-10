@@ -1,10 +1,10 @@
 require_relative 'acceptance_helper'
 
-feature 'Like the answer', %q{
+feature 'Like the answer', '
   In order to vote for the answer
   As an authenticated user
   I want to be able to like the answer
-} do
+' do
 
   given(:user) { create(:user) }
   given(:user2) { create(:user) }
@@ -20,7 +20,7 @@ feature 'Like the answer', %q{
       sleep 1
       click_on 'Like', id: "like-btn-answer-#{answer2.id}"
       sleep 1
-      expect(page).to have_content 'Like: 1'
+      expect(page).to have_content '101'
     end
   end
 
@@ -28,7 +28,7 @@ feature 'Like the answer', %q{
     sign_in(user2)
     visit question_path(question)
     within '.answers' do
-     expect(page).to_not have_css("#like-btn-answer-#{answer2.id}")
+      expect(page).to_not have_css("#like-btn-answer-#{answer2.id}")
     end
   end
 end
