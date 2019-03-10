@@ -17,12 +17,6 @@ feature 'Dislike the answer', %q{
     click_on 'Dislike this answer'
     click_on 'Dislike this answer'
     expect(page).to have_content '1'
-
-    # within '.answers' do
-    #   click_on 'Dislike this answer'
-    #   click_on 'Dislike this answer'
-    #   expect(page).to have_content '1'
-    # end
   end
 
   scenario 'Author dislikes own answer', js: true do

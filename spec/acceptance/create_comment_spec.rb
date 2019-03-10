@@ -14,8 +14,8 @@ feature 'Create comment', %q{
 
     sign_in(user)
     visit question_path(question)
-    fill_in 'Questions comment', with: 'text text'
-    click_on 'Save questions comment'
+    fill_in 'Question comment', with: 'text text'
+    click_on 'Save question comment'
 
     within '.comments' do
       expect(page).to have_content 'text text'

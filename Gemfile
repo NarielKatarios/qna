@@ -26,6 +26,7 @@ gem 'cocoon'
 gem 'emoji'
 gem 'private_pub'
 gem 'thin'
+gem 'responders'
 
 group :development, :test do
   gem 'byebug'

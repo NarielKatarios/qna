@@ -15,11 +15,8 @@ feature 'Comet answer', %q{
 
     sign_in(user2)
     visit question_path(question)
-
-
-    #save_and_open_page
     within '.answers' do
-      expect(page).to have_content 'MyAnswer' #как созданный ответ увидеть?
+      expect(page).to have_content 'MyAnswer'
     end
   end
 end

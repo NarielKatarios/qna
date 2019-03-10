@@ -4,27 +4,21 @@ class CommentsController < ApplicationController
   before_action :load_comment, only: [:update, :destroy]
   before_action :load_poly_model, only: [:create, :update, :destroy]
 
+  respond_to :js
+
   def create
-    @comment = @polymorphic_model.comments.build(comment_params.merge(user_id: current_user.id))
-    respond_to do |format|
-      if @comment.save
-        format.js
-      end
-    end
+    respond_with(@comment = @polymorphic_model.comments.create(comment_params.merge(user_id: current_user.id)))
   end
 
   def update
     @comment.update(comment_params)
     @question = @comment.question
     @comments = @polymorphic_model.answers
+    respond_with @comment
   end
 
   def destroy
-    @comment = @polymorphic_model.comments.find_by(user_id: current_user.id, id: params[:id])
-    @comment.destroy if @comment.present?
-    respond_to do |format|
-        format.js
-    end
+    respond_with(@comment = @polymorphic_model.comments.find_by(user_id: current_user.id, id: params[:id]).destroy)
   end
 
   private

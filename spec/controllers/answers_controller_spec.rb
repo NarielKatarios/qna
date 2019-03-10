@@ -14,24 +14,12 @@ RSpec.describe AnswersController, type: :controller do
 
         expect{post :create, params: { user_id: user.id, question_id: question.id, answer: attributes_for(:answer), format: :js }}.to change(question.answers, :count).by(1), format: :js
       end
-      it 'renders to question show view' do
-        byebug
-        # post :create, question_id: question, answer: attributes_for(:answer), format: :js
-        post :create, params: { user_id: user.id, question_id: question, answer: attributes_for(:answer) }, format: :js
-        expect(JSON.parse(response.body)['id']).to eq question.answers.last.id
-        # expect(response).to eq question.answers.last.id
-      end
     end
 
     context 'with invalid attributes', js: true do
       sign_in_user
       it 'does not save the new answer in the database' do
-        post :create, params: { user_id: user, question_id: question, answer: attributes_for(:invalid_answer), format: :js }, format: :js
-        expect(response).to_not change(question.answers.reload, :count)
-      end
-      it 're-renders new view' do
-        post :create, params: { user_id: user.id, question_id: question.id, answer: attributes_for(:invalid_answer), format: :js }, format: :js
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect{post :create, params: { user_id: user, question_id: question, answer: attributes_for(:invalid_answer), format: :js }}.to_not change(question.answers.reload, :count)
       end
     end
   end
@@ -43,12 +31,7 @@ RSpec.describe AnswersController, type: :controller do
     sign_in_user
     before { answer }
     it 'deletes answer' do
-      expect { delete :destroy, params: { question_id: question.id, id: answer.id } }.to change(Answer, :count).by(-1)
-    end
-
-    it 'redirects to index view' do
-      delete :destroy, params: { question_id: question.id, id: answer.id }
-      expect(response).to redirect_to questions_path
+      expect { delete :destroy, params: { id: answer.id }, format: :js }.to change(Answer, :count).by(-1)
     end
   end
 

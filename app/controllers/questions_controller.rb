@@ -1,57 +1,46 @@
 class QuestionsController < ApplicationController
   before_action :authenticate_user!, except: [ :index, :show ]
   before_action :load_question, only: [:show, :edit, :update, :destroy]
+  before_action :build_answer, only: :show
+  after_action :publish_question, only: :create
+
+
+  respond_to :html
 
   include Voted
 
   def index
-    @questions = Question.all
+    respond_with(@questions = Question.all)
   end
 
   def show
-    @answer = @question.answers.build
-    @answer.attachments.build
     answers = @question.answers
     best = answers.select {|answer| answer.id == @question.best_answer}
     @answers = best + (answers - best)
     response.headers["Cache-Control"] = "no-cache, no-store"
     @comment = @question.comments.build
+    respond_with @question
   end
 
   def new
-    @question = Question.new
-    @question.attachments.build
+    respond_with(@question = Question.new)
   end
 
   def edit
   end
 
   def create
-    @question = current_user.questions.new(question_params)
-    if @question.save
-      PrivatePub.publish_to "/questions/new", question: @question.to_json
-      redirect_to question_path(@question)
-      flash[:notice] = 'Your question has been successfully created.'
-    else
-      render :new
-    end
+    respond_with(@question = current_user.questions.create(question_params))
   end
 
   def update
-    if @question.update(question_params)
-      redirect_to question_path(@question)
-    else
-      render :edit
-    end
+    @question.update(question_params)
+    respond_with @question
   end
 
   def destroy
-    if @question.destroy
-      flash[:notice] = 'Your question has been deleted.'
-      redirect_to questions_path
-    else
-      render :edit
-    end
+    flash[:notice] = 'Your question has been deleted.' if @question.destroy
+    respond_with(@question.destroy)
   end
 
   def best_answer
@@ -66,6 +55,18 @@ class QuestionsController < ApplicationController
   def load_question
     @question = Question.find(params[:id])
   end
+
+  def publish_question
+    PrivatePub.publish_to "/questions/new", question: @question.to_json if @question.valid?
+  end
+
+  def build_answer
+    @answer = @question.answers.build
+  end
+
+  # def interpolation_options
+  #   { resource_name: 'New awesome question', time: @question.created_at, user: current_user.email }
+  # end
 
   def question_params
     params.require(:question).permit(:title, :body, attachments_attributes: [:id, :file, :_destroy] )

@@ -14,8 +14,8 @@ ul
           - if current_user == answer.user
         p
           - if current_user && current_user != answer.user
-            = link_to 'Like this answer', question_answer_like_path(@question.id, answer_id: answer.id), method: :post, remote: true, class: 'answer_like', id: "like-btn-answer-#{answer.id}"
-            = link_to 'Dislike this answer', question_answer_dislike_path(@question.id, answer_id: answer.id), method: :post, remote: true, class: 'answer_dislike', id: "dislike-btn-answer-#{answer.id}"
+            = link_to 'Like this answer', answer_like_path(@question.id, answer_id: answer.id), method: :post, remote: true, class: 'answer_like', id: "like-btn-answer-#{answer.id}"
+            = link_to 'Dislike this answer', answer_dislike_path(@question.id, answer_id: answer.id), method: :post, remote: true, class: 'answer_dislike', id: "dislike-btn-answer-#{answer.id}"
           = render 'answers/answer_digits', answer: answer
 
         - if answer.id == @question.best_answer
@@ -26,23 +26,24 @@ ul
           - if current_user == @question.user
             = button_to 'Make this answer the best', question_best_answer_path(@question.id, answer_id: answer.id)
 
-        p
-          b Comments: &nbsp
-          div class="#{answer.class.to_s.underscore}_comments"
-            = render 'comments/list', poly_model: answer
-        p
-          - if current_user == answer.user
-            = link_to 'Edit', '', class: 'edit-answer-link', id: "edit-btn-answer-#{answer.id}", data: { answer_id: answer.id }
-            = form_for [@question, answer], remote: true, html: { id: "edit-answer-#{answer.id}"} do |form|
-              .field
-                = form.label :body, "Answer"
-                = form.text_area :body
-              = form.fields_for :attachments do |a|
-                = render 'questions/attachment_fields', f: a
-              .links
-                = link_to_add_association 'add file', form, :attachments
-              = form.submit 'Save answer'
-            p= link_to 'Delete', question_answer_path(answer.id, question_id: @question.id), method: :delete, data: { confirm: 'Are you sure?' }
+        .comments
+          p
+            b Comments: &nbsp
+            div class="#{answer.class.to_s.underscore}_comments"
+              = render 'comments/list', poly_model: answer
+          p
+            - if current_user == answer.user
+              = link_to 'Edit', '', class: 'edit-answer-link', id: "edit-btn-answer-#{answer.id}", data: { answer_id: answer.id }
+              = form_for answer, remote: true, html: { id: "edit-answer-#{answer.id}"} do |form|
+                .field
+                  = form.label :body, "Answer"
+                  = form.text_area :body
+                = form.fields_for :attachments do |a|
+                  = render 'questions/attachment_fields', f: a
+                .links
+                  = link_to_add_association 'add file to answer', form, :attachments
+                = form.submit 'Save answer'
+              p= link_to 'Delete answer', answer_path(answer.id, question_id: @question.id), method: :delete, data: { confirm: 'Are you sure?' }, remote: true
 
     = subscribe_to "/answer/#{answer.id}/comments"
 javascript:

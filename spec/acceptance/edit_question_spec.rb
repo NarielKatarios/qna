@@ -10,7 +10,7 @@ feature 'Edit question', %q{
   given(:user2) { create(:user) }
   given(:question) { create(:question, user_id: user.id) }
 
-  scenario 'Authenticated user edites own question' do
+  scenario 'Authenticated user edits own question' do
     sign_in(user)
 
     visit question_path(question)

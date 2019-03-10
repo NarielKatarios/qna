@@ -16,12 +16,11 @@ feature 'Add files to answer', %q{
 
   scenario 'User attaches a file when giving an answer', js: true do
     fill_in 'Your answer', with: 'My answer'
-    click_on 'add file'
+
     attach_file 'File', "#{Rails.root}/spec/spec_helper.rb"
     click_on 'Save answer'
 
     within '.answers' do
-      #expect(page).to have_link 'spec_helper.rb', href: '/uploads/attachment/file/1/spec_helper.rb'
       expect(page).to have_link '', href: '/uploads/attachment/file/1/spec_helper.rb'
     end
   end

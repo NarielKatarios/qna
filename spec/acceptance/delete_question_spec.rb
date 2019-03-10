@@ -21,12 +21,8 @@ feature 'Delete question', %q{
   end
 
   scenario 'Authenticated user deletes foreign question' do
-
     sign_in(user2)
-
     visit question_path(question)
-
-    #expect(page).to have_content "You can not delete #{question.title}"
     expect(page).to_not have_content 'Delete'
   end
 

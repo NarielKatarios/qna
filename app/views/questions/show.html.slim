@@ -1,4 +1,4 @@
-body { background-color: #c3c3c3; }
+.question
   h1 Question
   i
     - if current_user == @question.user
@@ -52,7 +52,7 @@ body { background-color: #c3c3c3; }
           = form.label :body, 'Your answer'
           .answer-errors
           = form.text_area :body
-        = form.fields_for :attachments do |a|
+        = form.fields_for :attachments, @answer.attachments.build do |a|
           = render 'attachment_fields', f: a
         .links
           = link_to_add_association 'add file', form, :attachments

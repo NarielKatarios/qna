@@ -11,13 +11,15 @@ feature 'Delete answer', %q{
   given!(:question) { create(:question) }
   given!(:answer) { create(:answer, question_id: question.id, user_id: user.id) }
 
-  scenario 'Authenticated user deletes own answer' do
+  scenario 'Authenticated user deletes own answer', js: true do
 
     sign_in(user)
     visit question_path(question)
-    click_on 'Delete'
+    page.accept_alert 'Are you sure?' do
+      click_on 'Delete answer'
+    end
 
-    expect(page).to have_content 'Your answer has been successfully deleted.'
+    expect(page).to_not have_content "MyAnswer"
   end
 
   scenario 'Authenticated user deletes foreign answer' do
