@@ -28,7 +28,6 @@ class AnswersController < ApplicationController
   def destroy
     @answers = @question.answers
     respond_with(@answer = @answers.find_by(id: params[:id]).destroy)
-    # respond_with(@answer.destroy)
   end
 
   private

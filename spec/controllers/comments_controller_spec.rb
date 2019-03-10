@@ -3,8 +3,6 @@ require 'rails_helper'
 RSpec.describe CommentsController, type: :controller do
   sign_in_user
 
-  # let!(:user) { create(:user) }
-  # let!(:user2) { create(:user) }
   let(:question) { create :question }
   let(:answer) { create :answer }
 

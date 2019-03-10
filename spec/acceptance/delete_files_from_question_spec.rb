@@ -11,11 +11,6 @@ feature 'Delete files from question', %q{
   given(:question) { create(:question, user_id: user.id) }
   given!(:attachment) { create(:attachment, attachable_id: question.id, attachable_type: 'Question') }
 
-  # background do
-  #   sign_in(user)
-  #   visit edit_question_path(question)
-  # end
-
   scenario 'Author deletes a file when changing a question' do
     sign_in(user)
     visit edit_question_path(question)
