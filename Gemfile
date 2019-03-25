@@ -27,6 +27,14 @@ gem 'therubyracer'
 gem 'thin'
 gem 'turbolinks', '~> 5'
 gem 'uglifier', '>= 1.3.0'
+gem 'omniauth'
+gem 'oa-vkontakte'
+gem 'omniauth-vkontakte'
+gem 'omniauth-facebook'
+gem 'omniauth-twitter'
+gem 'omniauth-google'
+gem 'omniauth-yandex'
+
 
 group :development, :test do
   gem 'byebug'
