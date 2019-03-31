@@ -3,28 +3,13 @@ class User < ApplicationRecord
   # :confirmable, :lockable, :timeoutable
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable,
-         :omniauthable, omniauth_providers: [:vkontakte, :twitter, :facebook, :google, :yandex]
+         :omniauthable, omniauth_providers: [:vkontakte, :facebook]
 
   has_many :answers
   has_many :questions
   has_many :votes
   has_many :comments
   has_many :authorizations
-
-  # AVATAR_SIZES = {
-  #     micro: 16,
-  #     thumb: 32,
-  #     medium: 128,
-  #     large: 512
-  # }
-  #
-  # def gravatar_url(size)
-  #   size = avatar_size(size)
-  # end
-  #
-  # def avatar_size(size)
-  #   AVATAR_SIZES[size]
-  # end
 
   def self.find_for_oauth(auth)
     authorization = Authorization.where(provider: auth.provider, uid: auth.uid.to_s).first
@@ -36,6 +21,9 @@ class User < ApplicationRecord
       user.create_authorization(auth)
     else
       password = Devise.friendly_token[0, 20]
+      unless email
+        email = "user#{ids.join}-#{auth.uid}@#{auth.provider}.com"
+      end
       user = User.create!(email: email, password: password, password_confirmation: password )
       user.create_authorization(auth)
     end
