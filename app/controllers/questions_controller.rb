@@ -6,6 +6,8 @@ class QuestionsController < ApplicationController
 
   respond_to :html
 
+  authorize_resource
+
   include Voted
 
   def index

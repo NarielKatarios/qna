@@ -23,4 +23,7 @@ config/secrets.yml
 .idea
 test.rb
 test2.rb
+test.html
+test1.html
+test.css
 /public/uploads

@@ -17,6 +17,7 @@ class AnswersController < ApplicationController
   end
 
   def update
+    authorize @answer
     @answer.update(answer_params)
     answers = @question.answers
     best = answers.select { |answer| answer.id == @question.best_answer }
