@@ -12,12 +12,12 @@ feature 'Best answer', '
 
   scenario 'Author of the question marks best answer' do
     sign_in(user)
-
     visit question_path(question)
 
     within '.answers' do
       click_on 'Make this answer the best'
     end
+    # save_and_open_page
     expect(page).to have_content 'best answer'
     expect(page).to_not have_selector 'check_box'
   end
