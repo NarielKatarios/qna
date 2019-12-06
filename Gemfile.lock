@@ -198,7 +198,7 @@ GEM
     private_pub (1.0.3)
       faye
     public_suffix (3.0.3)
-    puma (3.12.0)
+    puma (3.12.2)
     rack (2.0.6)
     rack-test (1.1.0)
       rack (>= 1.0, < 3)
@@ -354,7 +354,7 @@ DEPENDENCIES
   omniauth-yandex
   pg (~> 0.18)
   private_pub
-  puma (~> 3.7)
+  puma (~> 3.12)
   rails (~> 5.1.4)
   rails-controller-testing
   rails-ujs
